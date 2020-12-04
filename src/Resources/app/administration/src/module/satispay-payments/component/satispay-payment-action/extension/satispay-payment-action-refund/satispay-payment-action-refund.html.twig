@@ -1,0 +1,26 @@
+{% block satispay_payment_actions_modal_refund %}
+
+    <sw-modal
+        variant="small"
+        :title="$tc(`satispay-payments.paymentDetails.modal.refund.title`)"
+        @modal-close="$emit('modal-close')">
+        <sw-number-field
+            :max="refundableAmount"
+            :min="0"
+            v-model="refundAmount"
+            :label="$tc('satispay-payments.paymentDetails.modal.refund.amount.label')"
+            :helpText="$tc('satispay-payments.paymentDetails.modal.refund.amount.helpText')">
+            <template #suffix>
+                {{ paymentResource.currency }}
+            </template>
+        </sw-number-field>
+
+        <template #modal-footer>
+            <sw-button variant="primary"
+                       @click="refund">
+                {{ $tc('satispay-payments.paymentDetails.modal.refund.confirmButton') }}
+            </sw-button>
+        </template>
+
+    </sw-modal>
+{% endblock %}

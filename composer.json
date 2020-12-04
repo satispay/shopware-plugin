@@ -1,0 +1,35 @@
+{
+    "name": "satispay/shopware6-plugin",
+    "description": "Satispay Shopware6 Plugin",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Satispay\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Satispay",
+            "homepage": "http://satispay.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "github",
+            "url": "git@github.com:satispay/gbusiness-api-php-sdk.git"
+        }
+    ],
+    "require": {
+        "shopware/core": "6.*",
+        "satispay/gbusiness-api-php-sdk": "^1.2",
+        "ext-json": "*"
+    },
+    "extra": {
+        "shopware-plugin-class": "Satispay\\Satispay",
+        "label": {
+            "de-DE": "Satispay payment",
+            "en-GB": "Satispay payment"
+        }
+    }
+}

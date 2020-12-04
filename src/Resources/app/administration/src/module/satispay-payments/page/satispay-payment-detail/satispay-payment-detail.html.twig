@@ -1,0 +1,53 @@
+{% block satispay_payment_detail %}
+    <div class="satispay-payment-detail">
+        <div v-if="!isLoading && showPaymentDetails">
+            <sw-card :title="$tc('satispay-payments.paymentDetails.title')">
+                <template #grid>
+
+                    {% block satispay_payment_actions_section %}
+                        <sw-card-section secondary slim>
+                            <satispay-payment-actions :order="order" :paymentResource="paymentTransactionData">
+                            </satispay-payment-actions>
+                        </sw-card-section>
+                    {% endblock %}
+
+                    <sw-card-section divider="top">
+                        <sw-container columns="1fr"
+                                      gap="0px 30px">
+                            <h3>
+                                  {{ $tc('satispay-payments.paymentDetails.status.heading') }}
+                            </h3>
+
+                            {% block satispay_payment_detail %}
+                                <sw-description-list>
+                                    <dt>{{ $tc('satispay-payments.paymentDetails.description.status') }}</dt>
+                                    <dd>{{ status }}</dd>
+                                    <dt>{{ $tc('satispay-payments.paymentDetails.description.amount') }}</dt>
+                                    <dd>{{ amount }}</dd>
+                                    <dt>{{ $tc('satispay-payments.paymentDetails.description.currency') }}</dt>
+                                    <dd>{{ currency }}</dd>
+                                    <dt>{{ $tc('satispay-payments.paymentDetails.description.flow') }}</dt>
+                                    <dd>{{ flow }}</dd>
+                                    <dt>{{ $tc('satispay-payments.paymentDetails.description.type') }}</dt>
+                                    <dd>{{ type }}</dd>
+                                </sw-description-list>
+                            {% endblock %}
+                        </sw-container>
+                    </sw-card-section>
+                </template>
+            </sw-card>
+
+        </div>
+
+        <div v-if="showError">
+            <sw-empty-state
+                :title="$tc('satispay-payments.paymentDetails.errorPage.title')"
+                :subline="$tc('satispay-payments.paymentDetails.errorPage.subline')"
+                icon="default-shopping-paper-bag"
+                color="#A092F0">
+            </sw-empty-state>
+        </div>
+
+        <sw-loader v-if="isLoading"></sw-loader>
+    </div>
+{% endblock %}

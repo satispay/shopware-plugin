@@ -1,0 +1,104 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="Satispay\Handler\PaymentHandler">
+            <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
+            <argument type="service" id="Satispay\Handler\Api\PayTransaction"/>
+            <argument type="service" id="Satispay\Handler\Api\FinalizeTransaction"/>
+            <argument type="service" id="monolog.logger"/>
+            <tag name="shopware.payment.method.async" />
+        </service>
+
+        <service id="Satispay\Controller\Api\ConfigurationController" public="true">
+            <argument type="service" id="Satispay\Handler\Api\ActivateCode"/>
+            <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="monolog.logger"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Satispay\Controller\Api\PaymentController" public="true">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
+            <argument type="service" id="monolog.logger"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Satispay\Controller\PaymentUpdatedController" public="true">
+            <argument type="service" id="Satispay\Handler\Api\UpdateTransaction"/>
+            <argument type="service" id="monolog.logger"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service id="Satispay\System\Config">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="Satispay\Handler\Api\ActivateCode">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+            <argument type="service" id="Satispay\System\Config"/>
+            <argument type="service" id="Satispay\Helper\Activation"/>
+            <argument type="service" id="monolog.logger"/>
+        </service>
+
+        <service id="Satispay\Handler\Api\PayTransaction">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+            <argument type="service" id="Satispay\Validation\SatispayConfiguration"/>
+            <argument type="service" id="Satispay\Validation\Currency"/>
+            <argument type="service" id="monolog.logger"/>
+        </service>
+
+        <service id="Satispay\Handler\Api\FinalizeTransaction">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument type="service" id="monolog.logger"/>
+        </service>
+
+        <service id="Satispay\Handler\Api\UpdateTransaction">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+            <argument type="service" id="Satispay\Validation\Payment"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
+            <argument type="service" id="monolog.logger"/>
+        </service>
+
+        <service id="Satispay\Helper\Activation">
+            <argument type="service" id="Satispay\System\Config"/>
+            <argument type="service" id="Satispay\Validation\SatispayConfiguration"/>
+            <argument type="service" id="monolog.logger"/>
+        </service>
+
+        <service id="Satispay\Helper\PaymentWrapperApi">
+            <argument type="service" id="Satispay\System\Config"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="Satispay\Helper\Currency"/>
+        </service>
+
+        <service id="Satispay\Helper\Currency">
+            <argument type="service" id="currency.repository"/>
+        </service>
+
+        <service id="Satispay\Validation\Currency">
+            <argument type="service" id="Satispay\Helper\Currency"/>
+        </service>
+
+        <service id="Satispay\Validation\SatispayConfiguration">
+            <argument type="service" id="Satispay\System\Config"/>
+        </service>
+
+        <service id="Satispay\Validation\Payment">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+        </service>
+
+    </services>
+</container>

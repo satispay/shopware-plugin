@@ -1,0 +1,10 @@
+{% block sw_order_detail_content_tabs_general %}
+    {% parent %}
+
+    <sw-tabs-item
+        v-if="isSatispayPayment"
+        :route="{ name: 'satispay.payment.detail', params: { id: $route.params.id } }"
+        :title="$tc('satispay-payments.order-detail.tabTitle')">
+        {{ $tc('satispay-payments.order-detail.tabTitle') }}
+    </sw-tabs-item>
+{% endblock %}

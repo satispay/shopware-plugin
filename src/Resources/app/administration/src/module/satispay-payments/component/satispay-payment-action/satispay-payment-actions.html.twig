@@ -1,0 +1,30 @@
+{% block satispay_payment_actions %}
+<div>
+    <div class="satispay-payment-actions__button-container">
+        <div class="satispay-payment-actions__authorize-button-group">
+
+            {% block satispay_payment_actions_refund %}
+                <sw-button variant="primary"
+                           size="small"
+                           :disabled="notRefundable"
+                           @click="showModal = true">
+                    {{ $tc('satispay-payments.paymentDetails.buttons.label.refund') }}
+                </sw-button>
+            {% endblock %}
+
+        </div>
+
+        {% block satispay_payment_actions_modal %}
+
+            {% block satispay_payment_actions_modal_refund %}
+                <satispay-payment-action-refund
+                    v-if="showModal"
+                    @modal-close="showModal=false"
+                    :order="order" :paymentResource="paymentResource">
+                </satispay-payment-action-refund>
+            {% endblock %}
+
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
