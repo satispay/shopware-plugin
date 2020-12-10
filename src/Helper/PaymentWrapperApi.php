@@ -167,10 +167,12 @@ class PaymentWrapperApi
 
     protected function initSatispay(?string $salesChannelId = null): void
     {
-        SatispayApi::setPluginVersionHeader(Versions::getVersion('satispay/shopware6-plugin'));
-        SatispayApi::setPluginNameHeader('Satispay/Shopware6_plugin');
-        SatispayApi::setTypeHeader('ECOMMERCE-PLUGIN');
+        SatispayApi::setPlatformHeader('Shopware');
         SatispayApi::setPlatformVersionHeader(Versions::getVersion('shopware/platform'));
+        SatispayApi::setPluginNameHeader('shopware-plugin');
+        SatispayApi::setPluginVersionHeader(Versions::getVersion('satispay/shopware6-plugin'));
+        SatispayApi::setTypeHeader('ECOMMERCE-PLUGIN');
+        SatispayApi::setTrackingHeader('shopware_b324105f-8712');
 
         SatispayApi::setSandbox($this->config->isSandBox($salesChannelId));
 
