@@ -85,7 +85,14 @@ class UpdateTransaction
 
         if ($satispayPayment->status === PaymentWrapperApi::ACCEPTED_STATUS) {
             $this->logger->debug('Transaction ' . $transactionId . ' is payed');
-            $this->orderTransactionStateHandler->paid($transactionId, $salesChannelContext->getContext());
+            // retrocompatibility with 6.1
+            if(method_exists($this->orderTransactionStateHandler,'paid')
+                && is_callable([$this->orderTransactionStateHandler,'paid']))
+            {
+                $this->orderTransactionStateHandler->paid($transactionId, $salesChannelContext->getContext());
+            } else {
+                $this->orderTransactionStateHandler->pay($transactionId, $salesChannelContext->getContext());
+            }
         } elseif ($satispayPayment->status === PaymentWrapperApi::CANCELLED_STATUS) {
             $this->logger->debug('Transaction ' . $transactionId . ' is cancelled');
             $this->orderTransactionStateHandler->cancel($transactionId, $salesChannelContext->getContext());
