@@ -154,7 +154,11 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
             }
 
             $paymentStatus = $transaction->getOrderTransaction()->getStateMachineState()->getTechnicalName();
-            if ($paymentStatus === OrderTransactionStates::STATE_OPEN) {
+            // retrocompatibility with 6.1
+            if ($paymentStatus === OrderTransactionStates::STATE_OPEN
+                && method_exists($this->orderTransactionStateHandler,'process')
+                && is_callable([$this->orderTransactionStateHandler,'process'])
+            ) {
                 $this->orderTransactionStateHandler->process(
                     $transaction->getOrderTransaction()->getId(),
                     $salesChannelContext->getContext()
