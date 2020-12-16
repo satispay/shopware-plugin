@@ -173,7 +173,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new CustomerCanceledAsyncPaymentException($transaction->getOrderTransaction()->getId());
+            throw new CustomerCanceledAsyncPaymentException($transaction->getOrderTransaction()->getId(),'');
         } catch (SatispayInvalidAuthorizationException $e) {
             $this->logger->error(
                 self::class . ' Satispay not correctly configured',
