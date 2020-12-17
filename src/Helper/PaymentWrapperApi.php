@@ -167,10 +167,18 @@ class PaymentWrapperApi
 
     protected function initSatispay(?string $salesChannelId = null): void
     {
+        SatispayApi::setPlatformHeader('Shopware');
+        // retrocompatibility with 6.1
+        try {
+            $shopwareVersion = Versions::getVersion('shopware/platform');
+        } catch (\OutOfBoundsException $exception){
+            $shopwareVersion = Versions::getVersion('shopware/core');
+        }
+        SatispayApi::setPlatformVersionHeader($shopwareVersion);
+        SatispayApi::setPluginNameHeader('shopware-plugin');
         SatispayApi::setPluginVersionHeader(Versions::getVersion('satispay/shopware6-plugin'));
-        SatispayApi::setPluginNameHeader('Satispay/Shopware6_plugin');
         SatispayApi::setTypeHeader('ECOMMERCE-PLUGIN');
-        SatispayApi::setPlatformVersionHeader(Versions::getVersion('shopware/platform'));
+        SatispayApi::setTrackingHeader('shopware_b324105f-8712');
 
         SatispayApi::setSandbox($this->config->isSandBox($salesChannelId));
 
