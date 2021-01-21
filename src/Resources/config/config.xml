@@ -15,6 +15,9 @@
             <label>Activation code (sandbox)</label>
             <helpText>Insert the six characters sandbox activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
         </input-field>
+        <component name="satispay-config-restriction-saleschannel">
+            <name>configRestrictionSalesChannel</name>
+        </component>
     </card>
     <card>
         <title>Modes</title>
