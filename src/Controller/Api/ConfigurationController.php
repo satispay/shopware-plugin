@@ -7,6 +7,7 @@ use Satispay\Handler\Api\ActivateCode;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ConfigurationController extends AbstractController
 {
+    public const STOREFRONT_SALESCHANNEL_TYPE_ID = '8a243080f92e4c719546314b577cf82b';
     /**
      * @var LoggerInterface
      */
@@ -50,10 +52,14 @@ class ConfigurationController extends AbstractController
     public function activate(Request $request, Context $context): JsonResponse
     {
         try {
-            $salesChannels = $this->salesChannelRepository->search(new Criteria(), $context);
+            $criteria = new Criteria();
+            //filter only storefront type of channels
+            $criteria->addFilter(new EqualsFilter('typeId',self::STOREFRONT_SALESCHANNEL_TYPE_ID));
+            $salesChannels = $this->salesChannelRepository->search($criteria, $context);
 
             if ($salesChannels->count() === 0) {
-                throw new \Exception('There are no sales channels, please check your shop sales channels');
+                throw new \Exception(
+                    'There are no storefront sales channels, please check your shop sales channels');
             }
 
             $this->helperConfig->activateChannel();
