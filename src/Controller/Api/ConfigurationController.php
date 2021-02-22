@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConfigurationController extends AbstractController
 {
     public const STOREFRONT_SALESCHANNEL_TYPE_ID = '8a243080f92e4c719546314b577cf82b';
+
     /**
      * @var LoggerInterface
      */
@@ -54,12 +55,13 @@ class ConfigurationController extends AbstractController
         try {
             $criteria = new Criteria();
             //filter only storefront type of channels
-            $criteria->addFilter(new EqualsFilter('typeId',self::STOREFRONT_SALESCHANNEL_TYPE_ID));
+            $criteria->addFilter(new EqualsFilter('typeId', self::STOREFRONT_SALESCHANNEL_TYPE_ID));
             $salesChannels = $this->salesChannelRepository->search($criteria, $context);
 
             if ($salesChannels->count() === 0) {
                 throw new \Exception(
-                    'There are no storefront sales channels, please check your shop sales channels');
+                    'There are no storefront sales channels, please check your shop sales channels'
+                );
             }
 
             $this->helperConfig->activateChannel();
