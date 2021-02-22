@@ -8,6 +8,6 @@ class SatispayPaymentIdInTransactionEmptyException extends ShopwareHttpException
 {
     public function getErrorCode(): string
     {
-        return 'SATISPAY_PLUGIN_PAYMENT_ID_MISSING_IN_TRANSACTION_EXCEPTION';
+        return 'SATISPAY_PLUGIN__PAYMENT_ID_MISSING_IN_TRANSACTION_EXCEPTION';
     }
 }

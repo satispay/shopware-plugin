@@ -4,10 +4,10 @@ namespace Satispay\Exception;
 
 use Shopware\Core\Framework\ShopwareHttpException;
 
-class SatispayNotValidPaymentIdForTransactionException extends ShopwareHttpException
+class SatispayTokenNotActivatedException extends ShopwareHttpException
 {
     public function getErrorCode(): string
     {
-        return 'SATISPAY_PLUGIN__NOT_VALID_PAYMENT_ID_FOR_TRANSACTION_EXCEPTION';
+        return 'SATISPAY_PLUGIN__TOKEN_NOT_ACTIVATED_EXCEPTION';
     }
 }
