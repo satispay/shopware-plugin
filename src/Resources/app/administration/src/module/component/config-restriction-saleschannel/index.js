@@ -88,19 +88,28 @@ Component.register('satispay-config-restriction-saleschannel', {
             }
 
             const isSandbox = document.querySelectorAll('input[name="Satispay.config.sandbox"]')[0].checked;
-            const activationCodeLive = document.querySelector('.sw-system-config--field-satispay-config-live-activation-code');
-            const activationCodeSandbox = document.querySelector('.sw-system-config--field-satispay-config-sandbox-activation-code');
-            if (isSandbox) {
-                activatedCodeLive.hidden = true;
-                activationCodeLive.hidden = true;
-                activationCodeSandbox.hidden = false;
-                activatedCodeSandbox.hidden = false;
-            } else {
-                activatedCodeSandbox.hidden = true;
-                activationCodeSandbox.hidden = true;
-                activationCodeLive.hidden = false;
-                activatedCodeLive.hidden = false;
+            let activationCodeLive = document.querySelector('.sw-system-config--field-satispay-config-live-activation-code');
+            if(!activationCodeLive && typeof fieldsConfigurationShopwareOldVersion[1] !== 'undefined') {
+                activationCodeLive = fieldsConfigurationShopwareOldVersion[1];
             }
+            let activationCodeSandbox = document.querySelector('.sw-system-config--field-satispay-config-sandbox-activation-code');
+            if(!activationCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[3] !== 'undefined') {
+                activationCodeSandbox = fieldsConfigurationShopwareOldVersion[3];
+            }
+            if(activationCodeLive && activatedCodeSandbox) {
+                if (isSandbox) {
+                    activatedCodeLive.hidden = true;
+                    activationCodeLive.hidden = true;
+                    activationCodeSandbox.hidden = false;
+                    activatedCodeSandbox.hidden = false;
+                } else {
+                    activatedCodeSandbox.hidden = true;
+                    activationCodeSandbox.hidden = true;
+                    activationCodeLive.hidden = false;
+                    activatedCodeLive.hidden = false;
+                }
+            }
+
         },
 
         pluginConfigData() {
