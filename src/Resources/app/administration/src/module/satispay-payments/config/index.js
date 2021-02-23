@@ -38,6 +38,7 @@ Component.override('sw-plugin-config', {
                 });
             } finally {
                 this.isLoading = false;
+                window.location.reload();
             }
         },
         onActivateClickedButton() {
