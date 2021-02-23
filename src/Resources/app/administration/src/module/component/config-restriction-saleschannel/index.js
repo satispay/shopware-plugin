@@ -20,23 +20,36 @@ Component.register('satispay-config-restriction-saleschannel', {
     methods: {
         checkAndHideSetting() {
             const currentSalesChannelId = this.pluginConfigData().currentSalesChannelId;
+            const fieldsConfigurationShopwareOldVersion = document.querySelectorAll('.sw-block-field');
             const activatedCodeSandbox = document.querySelector(
                 '.sw-system-config--field-satispay-config-sandbox-activated-code'
             );
-            const activatedCodeSandboxInheritanceSwitchOff = activatedCodeSandbox.querySelector(
-                'div.sw-inheritance-switch'
-            );
-            if (activatedCodeSandboxInheritanceSwitchOff) {
-                activatedCodeSandboxInheritanceSwitchOff.hidden = true;
+            if(!activatedCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[2] !== 'undefined') {
+                activatedCodeSandbox = fieldsConfigurationShopwareOldVersion[2];
             }
+            if(activatedCodeSandbox) {
+                const activatedCodeSandboxInheritanceSwitchOff = activatedCodeSandbox.querySelector(
+                    'div.sw-inheritance-switch'
+                );
+                if (activatedCodeSandboxInheritanceSwitchOff) {
+                    activatedCodeSandboxInheritanceSwitchOff.hidden = true;
+                }
+            }
+
             const activatedCodeLive = document.querySelector(
                 '.sw-system-config--field-satispay-config-live-activated-code');
-            const activatedCodeLiveInheritanceSwitchOff = activatedCodeLive.querySelector(
-                'div.sw-inheritance-switch'
-            );
-            if (activatedCodeLiveInheritanceSwitchOff) {
-                activatedCodeLiveInheritanceSwitchOff.hidden = true;
+            if(!activatedCodeLive && typeof fieldsConfigurationShopwareOldVersion[4] !== 'undefined') {
+                activatedCodeLive = fieldsConfigurationShopwareOldVersion[4];
             }
+            if(activatedCodeLive) {
+                const activatedCodeLiveInheritanceSwitchOff = activatedCodeLive.querySelector(
+                    'div.sw-inheritance-switch'
+                );
+                if (activatedCodeLiveInheritanceSwitchOff) {
+                    activatedCodeLiveInheritanceSwitchOff.hidden = true;
+                }
+            }
+
             const fields = document.querySelectorAll(
                 'input[name^="Satispay.config"],.sw-plugin-config__save-action,.sw-plugin-config__activate-action'
             );
