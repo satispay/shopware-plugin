@@ -24,8 +24,8 @@ Component.register('satispay-config-restriction-saleschannel', {
             let activatedCodeSandbox = document.querySelector(
                 '.sw-system-config--field-satispay-config-sandbox-activated-code'
             );
-            if(!activatedCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[2] !== 'undefined') {
-                activatedCodeSandbox = fieldsConfigurationShopwareOldVersion[2];
+            if(!activatedCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[4] !== 'undefined') {
+                activatedCodeSandbox = fieldsConfigurationShopwareOldVersion[4];
             }
             if(activatedCodeSandbox) {
                 const activatedCodeSandboxInheritanceSwitchOff = activatedCodeSandbox.querySelector(
@@ -38,8 +38,8 @@ Component.register('satispay-config-restriction-saleschannel', {
 
             let activatedCodeLive = document.querySelector(
                 '.sw-system-config--field-satispay-config-live-activated-code');
-            if(!activatedCodeLive && typeof fieldsConfigurationShopwareOldVersion[4] !== 'undefined') {
-                activatedCodeLive = fieldsConfigurationShopwareOldVersion[4];
+            if(!activatedCodeLive && typeof fieldsConfigurationShopwareOldVersion[2] !== 'undefined') {
+                activatedCodeLive = fieldsConfigurationShopwareOldVersion[2];
             }
             if(activatedCodeLive) {
                 const activatedCodeLiveInheritanceSwitchOff = activatedCodeLive.querySelector(
@@ -89,12 +89,12 @@ Component.register('satispay-config-restriction-saleschannel', {
 
             const isSandbox = document.querySelectorAll('input[name="Satispay.config.sandbox"]')[0].checked;
             let activationCodeSandbox = document.querySelector('.sw-system-config--field-satispay-config-sandbox-activation-code');
-            if(!activationCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[1] !== 'undefined') {
-                activationCodeSandbox = fieldsConfigurationShopwareOldVersion[1];
+            if(!activationCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[3] !== 'undefined') {
+                activationCodeSandbox = fieldsConfigurationShopwareOldVersion[3];
             }
             let activationCodeLive = document.querySelector('.sw-system-config--field-satispay-config-live-activation-code');
-            if(!activationCodeLive && typeof fieldsConfigurationShopwareOldVersion[3] !== 'undefined') {
-                activationCodeLive = fieldsConfigurationShopwareOldVersion[3];
+            if(!activationCodeLive && typeof fieldsConfigurationShopwareOldVersion[1] !== 'undefined') {
+                activationCodeLive = fieldsConfigurationShopwareOldVersion[1];
             }
 
             if(activationCodeLive && activatedCodeSandbox) {
