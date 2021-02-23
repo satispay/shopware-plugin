@@ -21,7 +21,7 @@ Component.register('satispay-config-restriction-saleschannel', {
         checkAndHideSetting() {
             const currentSalesChannelId = this.pluginConfigData().currentSalesChannelId;
             const fieldsConfigurationShopwareOldVersion = document.querySelectorAll('.sw-block-field');
-            const activatedCodeSandbox = document.querySelector(
+            let activatedCodeSandbox = document.querySelector(
                 '.sw-system-config--field-satispay-config-sandbox-activated-code'
             );
             if(!activatedCodeSandbox && typeof fieldsConfigurationShopwareOldVersion[2] !== 'undefined') {
@@ -36,7 +36,7 @@ Component.register('satispay-config-restriction-saleschannel', {
                 }
             }
 
-            const activatedCodeLive = document.querySelector(
+            let activatedCodeLive = document.querySelector(
                 '.sw-system-config--field-satispay-config-live-activated-code');
             if(!activatedCodeLive && typeof fieldsConfigurationShopwareOldVersion[4] !== 'undefined') {
                 activatedCodeLive = fieldsConfigurationShopwareOldVersion[4];
