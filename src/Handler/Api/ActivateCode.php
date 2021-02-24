@@ -108,9 +108,11 @@ class ActivateCode
     {
         $this->isEmptyActivationCode($salesChannelId);
         $activationCode = $this->satispayConfig->getActivationCode($salesChannelId);
+        $trimActivationCode = isset($activationCode) ? trim($activationCode): null;
         if ($salesChannelId !== null) {
             $activatedCodeGlobal = $this->satispayConfig->getGlobalActivatedCodeForSalesChannel($salesChannelId);
-            if (!empty($activatedCodeGlobal) && $activationCode == $activatedCodeGlobal) {
+            $trimActivatiedCodeGlobal = isset($activatedCodeGlobal) ? trim($activatedCodeGlobal): null;
+            if (!empty($trimActivatiedCodeGlobal) && $trimActivationCode == $trimActivatiedCodeGlobal) {
                 $this->satispayConfig->deleteActivationValues($salesChannelId);
                 $errorMessage = 'Activation code already active on global saleschannel.
                 Inherit activation values from global.';
@@ -118,7 +120,8 @@ class ActivateCode
             }
         }
         $activatedCode = $this->satispayConfig->getActivatedCode($salesChannelId);
-        if ($activationCode == $activatedCode) {
+        $trimActivatedCode = isset($activatedCode) ? trim($activatedCode): null;
+        if ($trimActivationCode == $trimActivatedCode) {
             $errorMessage = 'Activation code already active for salesChannel '
                 . (empty($salesChannelId) ? 'GLOBAL' : $salesChannelId);
 

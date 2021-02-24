@@ -73,7 +73,7 @@ class Config
         $type = $this->getType($salesChannelId);
         $value = $this->systemConfig->get("Satispay.config.{$type}ActivationCode", $salesChannelId);
 
-        if (empty($value)) {
+        if (empty($value) || trim($value) == "") {
             throw new SatispayMissingConfigException('Activation code is missing!');
         }
 
@@ -151,9 +151,9 @@ class Config
         if($salesChannelId == null) {
             $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
         } else {
-            if($activationCode === '') {
+            if($activationCode!= null && trim($activationCode) == "") {
                 $activatedCodeGlobal = $this->getGlobalActivatedCodeForSalesChannel($salesChannelId);
-                if(empty($activatedCodeGlobal)) {
+                if(empty($activatedCodeGlobal) || trim($activatedCodeGlobal) == "") {
                     $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
                     $this->systemConfig->delete("Satispay.config.{$type}ActivationCode", $salesChannelId);
                 } else {
@@ -162,7 +162,9 @@ class Config
             } else {
                 $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
                 $activationCodeGlobal = $this->getGlobalActivationCodeForSalesChannel($salesChannelId);
-                if($activationCode == $activationCodeGlobal) {
+                $trimActivationCode = isset($activationCode) ? trim($activationCode): false;
+                $trimActivationCodeGlobal = isset($activationCodeGlobal) ? trim($activationCodeGlobal): false;
+                if($trimActivationCode == $trimActivationCodeGlobal) {
                     $this->systemConfig->delete("Satispay.config.{$type}ActivationCode", $salesChannelId);
                 }
             }
