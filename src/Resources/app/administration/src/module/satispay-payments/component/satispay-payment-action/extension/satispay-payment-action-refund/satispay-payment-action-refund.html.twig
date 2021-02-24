@@ -14,7 +14,11 @@
                 {{ paymentResource.currency }}
             </template>
         </sw-number-field>
-
+        <span style="font-size: 10px;">
+            {{ $tc('satispay-payments.paymentDetails.modal.refund.amount.helpTextEmpty') }}
+            <br />
+            {{ $tc('satispay-payments.paymentDetails.modal.refund.amount.helpTextDecimals') }}
+        </span>
         <template #modal-footer>
             <sw-button variant="primary"
                        @click="refund">
