@@ -156,8 +156,8 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
             $paymentStatus = $transaction->getOrderTransaction()->getStateMachineState()->getTechnicalName();
             // retrocompatibility with 6.1
             if ($paymentStatus === OrderTransactionStates::STATE_OPEN
-                && method_exists($this->orderTransactionStateHandler,'process')
-                && is_callable([$this->orderTransactionStateHandler,'process'])
+                && method_exists($this->orderTransactionStateHandler, 'process')
+                && is_callable([$this->orderTransactionStateHandler, 'process'])
             ) {
                 $this->orderTransactionStateHandler->process(
                     $transaction->getOrderTransaction()->getId(),
@@ -173,7 +173,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new CustomerCanceledAsyncPaymentException($transaction->getOrderTransaction()->getId(),'');
+            throw new CustomerCanceledAsyncPaymentException($transaction->getOrderTransaction()->getId(), '');
         } catch (SatispayInvalidAuthorizationException $e) {
             $this->logger->error(
                 self::class . ' Satispay not correctly configured',

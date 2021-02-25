@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Satispay\System;
 
+use Doctrine\DBAL\Connection;
 use Satispay\Exception\SatispayMissingConfigException;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class Config
@@ -14,15 +16,22 @@ class Config
      */
     protected $systemConfig;
 
+    /**
+     * @var Connection
+     */
+    private $connection;
+
     public function __construct(
-        SystemConfigService $systemConfig
+        SystemConfigService $systemConfig,
+        Connection $connection
     ) {
         $this->systemConfig = $systemConfig;
+        $this->connection = $connection;
     }
 
     public function isSandBox(?string $salesChannelId = null): bool
     {
-        $sandbox = $this->systemConfig->get('Satispay.config.sandBox', $salesChannelId);
+        $sandbox = $this->systemConfig->get('Satispay.config.sandbox', $salesChannelId);
         $isSandbox = false;
         if ($sandbox && $sandbox === true) {
             $isSandbox = true;
@@ -64,55 +73,131 @@ class Config
         $type = $this->getType($salesChannelId);
         $value = $this->systemConfig->get("Satispay.config.{$type}ActivationCode", $salesChannelId);
 
-        if (!$value) {
+        if (empty($value) || trim($value) == "") {
             throw new SatispayMissingConfigException('Activation code is missing!');
         }
 
         return $value;
     }
 
-    public function getConfigKeyForActivationCode(string $activationCode, ?string $salesChannelId = null): string
+    /**
+     * Get the currently actived code based on the configuration type(sandbox|live)
+     *
+     * @return string|null activation code
+     */
+    public function getActivatedCode(?string $salesChannelId = null): ?string
     {
-        return 'Satispay.' . $activationCode . '::' . $this->getType($salesChannelId);
+        $type = $this->getType($salesChannelId);
+        $value = $this->systemConfig->get("Satispay.config.{$type}ActivatedCode", $salesChannelId);
+
+        return $value;
+    }
+
+    /**
+     * Get the currently actived code fallback global value for the salesChannel in input
+     *
+     * @return string|null activation code
+     */
+    public function getGlobalActivatedCodeForSalesChannel(string $salesChannelId): ?string
+    {
+        $type = $this->getType($salesChannelId);
+        $value = $this->systemConfig->get("Satispay.config.{$type}ActivatedCode");
+
+        return $value;
+    }
+
+    /**
+     * Get the currently activation code fallback global value for the salesChannel in input
+     *
+     * @return string|null activation code
+     */
+    public function getGlobalActivationCodeForSalesChannel(string $salesChannelId): ?string
+    {
+        $type = $this->getType($salesChannelId);
+        $value = $this->systemConfig->get("Satispay.config.{$type}ActivationCode");
+
+        return $value;
     }
 
     /**
      * Save values in system config
      */
-    public function saveActivationValues(string $publicKey, string $privateKey, string $keyId, ?string $salesChannelId = null): void
+    public function saveActivationValues(
+        string $publicKey,
+        string $privateKey,
+        string $keyId,
+        ?string $salesChannelId = null
+    ): void
     {
         $type = $this->getType($salesChannelId);
-
+        $activateCode = $this->getActivationCode($salesChannelId);
         $this->systemConfig->set("Satispay.config.{$type}publicKey", $publicKey, $salesChannelId);
         $this->systemConfig->set("Satispay.config.{$type}privateKey", $privateKey, $salesChannelId);
         $this->systemConfig->set("Satispay.config.{$type}keyId", $keyId, $salesChannelId);
+        $this->systemConfig->set("Satispay.config.{$type}ActivatedCode", $activateCode, $salesChannelId);
     }
 
     /**
-     * @return array|mixed|null
+     * @param string|null $salesChannelId
+     * removes current activation values
      */
-    public function getContextsWhereActivationCodeIsUsed(string $activationCode, ?string $salesChannelId = null)
+    public function deleteActivationValues(?string $salesChannelId = null): void
     {
-        $key = $this->getConfigKeyForActivationCode($activationCode, $salesChannelId);
-
-        return $this->systemConfig->get($key);
+        $type = $this->getType($salesChannelId);
+        $this->systemConfig->delete("Satispay.config.{$type}publicKey", $salesChannelId);
+        $this->systemConfig->delete("Satispay.config.{$type}privateKey", $salesChannelId);
+        $this->systemConfig->delete("Satispay.config.{$type}keyId", $salesChannelId);
+        $activationCode = $this->systemConfig->get("Satispay.config.{$type}ActivationCode", $salesChannelId);
+        if($salesChannelId == null) {
+            $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
+        } else {
+            if($activationCode!= null && trim($activationCode) == "") {
+                $activatedCodeGlobal = $this->getGlobalActivatedCodeForSalesChannel($salesChannelId);
+                if(empty($activatedCodeGlobal) || trim($activatedCodeGlobal) == "") {
+                    $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
+                    $this->systemConfig->delete("Satispay.config.{$type}ActivationCode", $salesChannelId);
+                } else {
+                    $this->systemConfig->set("Satispay.config.{$type}ActivatedCode", $activationCode, $salesChannelId);
+                }
+            } else {
+                $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
+                $activationCodeGlobal = $this->getGlobalActivationCodeForSalesChannel($salesChannelId);
+                $trimActivationCode = isset($activationCode) ? trim($activationCode): false;
+                $trimActivationCodeGlobal = isset($activationCodeGlobal) ? trim($activationCodeGlobal): false;
+                if($trimActivationCode == $trimActivationCodeGlobal) {
+                    $this->systemConfig->delete("Satispay.config.{$type}ActivationCode", $salesChannelId);
+                }
+            }
+        }
     }
 
-    public function updateContextsWhereActivationCodeIsUsed(?string $toSalesChannelId): void
+    /**
+     * @return string|null
+     */
+    public function getSalesChannelIdByActivatedCode(string $activationCode, ?string $salesChannelId = null)
     {
-        $activationCode = $this->getActivationCode($toSalesChannelId);
+        $type = $this->getType($salesChannelId);
+        $configurationKey = "Satispay.config.{$type}ActivatedCode";
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select('sales_channel_id', 'configuration_value')
+            ->from('system_config')
+            ->where('configuration_key = :configurationKey')
+            ->andWhere('sales_channel_id IS NOT NULL')
+            ->orderBy('configuration_key', 'ASC')
+            ->addOrderBy('sales_channel_id', 'ASC')
+            ->setParameter('configurationKey', $configurationKey);
+        $activatedSalesChannel = $queryBuilder->execute()->fetchAll();
+        if ($activatedSalesChannel === false) {
+            return null;
+        }
+        foreach ($activatedSalesChannel as $salesChannel) {
+            $activatedCode = json_decode($salesChannel['configuration_value'], true)['_value'];
+            if ($activatedCode === $activationCode) {
+                return Uuid::fromBytesToHex($salesChannel['sales_channel_id']);
+            }
+        }
 
-        $activated = $this->getContextsWhereActivationCodeIsUsed($activationCode, $toSalesChannelId);
-
-        $activatedSalesChannel = $activated ? json_decode($activated, true) : [];
-
-        //update activated value
-        $activatedSalesChannel[] = $toSalesChannelId;
-        //update 'Satispay.'.$key
-        $this->systemConfig->set(
-            $this->getConfigKeyForActivationCode($activationCode, $toSalesChannelId),
-            json_encode($activatedSalesChannel)
-        );
+        return null;
     }
 
     protected function getType(?string $salesChannelId = null): string

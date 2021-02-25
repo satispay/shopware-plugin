@@ -171,7 +171,7 @@ class PaymentWrapperApi
         // retrocompatibility with 6.1
         try {
             $shopwareVersion = Versions::getVersion('shopware/platform');
-        } catch (\OutOfBoundsException $exception){
+        } catch (\OutOfBoundsException $exception) {
             $shopwareVersion = Versions::getVersion('shopware/core');
         }
         SatispayApi::setPlatformVersionHeader($shopwareVersion);

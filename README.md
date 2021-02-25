@@ -53,7 +53,11 @@ After installation, a new [rule](https://docs.shopware.com/en/shopware-6-en/sett
 
    ![Satispay Activate](docs/assets/satispay-settings-activate.png)
 
+In case of success, you see in the Currently activated code your activation code.
 In case of error, you'll receive an error code for Satispay support to identify the issue.
+
+If you **empty the token activation** and click **activate**, 
+it will **delete current activation values** and you will need a new token to **activate your connection** to satispay.
 
    ![Satispay Error](docs/assets/satispay-error.png)
 
