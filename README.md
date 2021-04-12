@@ -1,6 +1,7 @@
-# Satispay payment
+# Satispay payment (0.0.1-beta)
 
 Satispay plugin for Shopware 6 ecommerce
+- The plugin is not currently in a production ready state;
 
 ## Requirements
 
