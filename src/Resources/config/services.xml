@@ -87,6 +87,21 @@
 
         <service id="Satispay\Helper\Currency">
             <argument type="service" id="currency.repository"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="order_transaction.repository"/>
+            <argument type="service" id="payment_method.repository"/>
+        </service>
+
+        <service id="Satispay\Helper\Order">
+            <argument type="service" id="Satispay\System\Config"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="payment_method.repository"/>
+        </service>
+
+        <service id="Satispay\Helper\Finalize">
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
+            <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
         </service>
 
         <service id="Satispay\Validation\Currency">
@@ -101,5 +116,20 @@
             <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
         </service>
 
+        <!-- Scheduled Task -->
+        <service id="Satispay\Service\ScheduledTask\SatispayPayments">
+            <tag name="shopware.scheduled.task" />
+        </service>
+        <!-- Scheduled Task Handler -->
+        <service id="Satispay\Service\ScheduledTask\SatispayPaymentsHandler">
+            <argument type="service" id="Satispay\System\Config"/>
+            <argument type="service" id="Satispay\Validation\SatispayConfiguration"/>
+            <argument type="service" id="Satispay\Helper\Order"/>
+            <argument type="service" id="Satispay\Helper\Finalize"/>
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="sales_channel.repository"/>
+            <argument type="service" id="monolog.logger"/>
+            <tag name="messenger.message_handler" />
+        </service>
     </services>
 </container>
