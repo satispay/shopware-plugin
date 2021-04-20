@@ -56,11 +56,18 @@ class Order
         $rangeStart = $this->getStartDateScheduledTime($salesChannelId);
         $rangeEnd = $this->getEndDateScheduledTime();
         // create a complex criteria condition
+        $criteriaOrder = $this->createOrdersCriteria($rangeStart, $rangeEnd, $satispayPaymentId, $salesChannelId);
+        $orders = $this->orderRepository->search($criteriaOrder, $context)->getEntities();
+        return $orders;
+    }
+
+    private function createOrdersCriteria($rangeStart, $rangeEnd, $satispayPaymentId, $salesChannelId)
+    {
         $criteriaOrder = new Criteria();
         $criteriaOrder->addAssociation('transactions');
         $criteriaOrder
             ->addFilter(new RangeFilter('order.transactions.createdAt.date',
-                [RangeFilter::GTE => $rangeStart, RangeFilter::LTE => $rangeEnd])
+                    [RangeFilter::GTE => $rangeStart, RangeFilter::LTE => $rangeEnd])
             )
             //TODO less than an hour before scheduled task start
             ->addFilter(new EqualsFilter('order.transactions.paymentMethodId', $satispayPaymentId))
@@ -73,9 +80,7 @@ class Order
             ->addFilter(new EqualsFilter('order.salesChannelId', $salesChannelId))
             ->addSorting(new FieldSorting('order.orderNumber'))
             ->addSorting(new FieldSorting('order.transactions.createdAt.date'));
-
-        $orders = $this->orderRepository->search($criteriaOrder, $context)->getEntities();
-        return $orders;
+        return $criteriaOrder;
     }
 
     /**
