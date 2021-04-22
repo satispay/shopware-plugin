@@ -37,4 +37,20 @@
             <name>configRestrictionSalesChannel</name>
         </component>
     </card>
+    <card>
+        <title>Functions</title>
+        <title lang="de-DE">Scheduled Task</title>
+        <input-field type="bool">
+            <name>scheduledTask</name>
+            <label>Enable scheduled task to finalize unhandled payments</label>
+            <helpText>Enable a scheduled task that finalize unhandled payments.</helpText>
+        </input-field>
+        <input-field type="int">
+            <name>timeFrame</name>
+            <label>Time frame</label>
+            <helpText>Specify the time frame for the payments to be handled. Min value is 2 hours.</helpText>
+            <defaultValue>4</defaultValue>
+            <min>2</min>
+        </input-field>
+    </card>
 </config>

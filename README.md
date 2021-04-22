@@ -105,6 +105,14 @@ In case of error, you'll receive an error code for Satispay support to identify 
 
 * In 6.1 the payment status after the get payment status will stay in **OPEN** instead of **IN PROGRESS**.
 
+## Scheduled task to finalize unhandled transactions
+
+![Satispay Scheduled Task](docs/assets/shopware-satispay-scheduled-task.png)
+
+In the plugin configuration there is a value to enable a scheduled task that runs every 4 hours and finalizes
+Satispay transactions for the latest hours specified in the Time Frame field (excluding the last hour so that these
+payments follow the default flow and wait for the callback).
+
 ## Tested on
 - 6.1
 - 6.2

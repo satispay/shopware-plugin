@@ -40,6 +40,35 @@ class Config
         return $isSandbox;
     }
 
+    /**
+     * Check if the Scheduled Task option is enabled
+     *
+     * @param string|null $salesChannelId
+     * @return bool
+     */
+    public function isScheduledTaskEnabled(?string $salesChannelId = null): bool
+    {
+        $scheduledTask = $this->systemConfig->get('Satispay.config.scheduledTask', $salesChannelId);
+        $isScheduledTask = false;
+        if ($scheduledTask && $scheduledTask === true) {
+            $isScheduledTask = true;
+        }
+
+        return $isScheduledTask;
+    }
+
+    /**
+     * Get time frame for scheduled task
+     *
+     * @param string|null $salesChannelId
+     * @return bool
+     */
+    public function getTimeFrameForScheduledTask(?string $salesChannelId = null): int
+    {
+        $timeFrame = $this->systemConfig->get('Satispay.config.timeFrame', $salesChannelId);
+        return $timeFrame;
+    }
+
     public function getPublicKey(?string $salesChannelId = null): ?string
     {
         $type = $this->getType($salesChannelId);
