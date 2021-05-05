@@ -1,11 +1,10 @@
-# Satispay payment (0.0.1-beta)
+# Satispay payment
 
 Satispay plugin for Shopware 6 ecommerce
-- The plugin is not currently in a production ready state;
 
 ## Requirements
 
-- Shopware 6
+- Shopware 6.1.* or 6.2.* or 6.3.*
 - Satispay payment method is allowed only for EURO transactions. 
 
 ## Installation
@@ -104,6 +103,14 @@ In case of error, you'll receive an error code for Satispay support to identify 
 ![Satispay Payment Flow](docs/assets/shopware-satispay-payment-flow.png)
 
 * In 6.1 the payment status after the get payment status will stay in **OPEN** instead of **IN PROGRESS**.
+
+## Scheduled task to finalize unhandled transactions
+
+![Satispay Scheduled Task](docs/assets/shopware-satispay-scheduled-task.png)
+
+In the plugin configuration there is a value to enable a scheduled task that runs every 4 hours and finalizes
+Satispay transactions for the latest hours specified in the Time Frame field (excluding the last hour so that these
+payments follow the default flow and wait for the callback).
 
 ## Tested on
 - 6.1
