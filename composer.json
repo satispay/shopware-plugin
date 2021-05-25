@@ -6,8 +6,7 @@
     "version": "1.0.2",
     "autoload": {
         "psr-4": {
-            "Satispay\\": "src/",
-            "SatispayGBusiness\\": "vendor/satispay/gbusiness-api-php-sdk/lib/"
+            "Satispay\\": "src/"
         }
     },
     "homepage": "https://www.satispay.com",

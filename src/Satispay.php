@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
 namespace Satispay;
-
+if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+    require_once dirname(__DIR__) . '/vendor/autoload.php';
+}
 use Satispay\Handler\PaymentHandler;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
