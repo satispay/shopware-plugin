@@ -14,12 +14,16 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEnti
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use function sprintf;
 
 class PaymentWrapperApi
 {
+    public const VERSION_UNDEFINED = 'UNDEFINED';
     public const ACCEPTED_STATUS = 'ACCEPTED';
     public const PENDING_STATUS = 'PENDING';
     public const CANCELLED_STATUS = 'CANCELED';
@@ -44,14 +48,21 @@ class PaymentWrapperApi
      */
     private $currencyHelper;
 
+    /**
+     * @var EntityRepositoryInterface
+     */
+    private $pluginRepository;
+
     public function __construct(
         SatispayConfig $config,
         RouterInterface $router,
-        Currency $currencyHelper
+        Currency $currencyHelper,
+        EntityRepositoryInterface $pluginRepository
     ) {
         $this->config = $config;
         $this->router = $router;
         $this->currencyHelper = $currencyHelper;
+        $this->pluginRepository = $pluginRepository;
     }
 
     public function sendPayloadToSatispay(string $salesChannelId, array $payload): \stdClass
@@ -176,7 +187,7 @@ class PaymentWrapperApi
         }
         SatispayApi::setPlatformVersionHeader($shopwareVersion);
         SatispayApi::setPluginNameHeader('shopware-plugin');
-        SatispayApi::setPluginVersionHeader(Versions::getVersion('satispay/shopware6-plugin'));
+        SatispayApi::setPluginVersionHeader($this->getDbPluginVersion());
         SatispayApi::setTypeHeader('ECOMMERCE-PLUGIN');
         SatispayApi::setTrackingHeader('shopware_b324105f-8712');
 
@@ -190,5 +201,19 @@ class PaymentWrapperApi
         SatispayApi::setPublicKey($publicKey);
         SatispayApi::setPrivateKey($privateKey);
         SatispayApi::setKeyId($keyId);
+    }
+
+    private function getDbPluginVersion()
+    {
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('baseClass', \Satispay\Satispay::class));
+
+        /** @var \Shopware\Core\Framework\Plugin\PluginEntity $satispay */
+        $satispay = $this->pluginRepository->search($criteria, $context)->getEntities()->first();
+        if($satispay !== NULL) {
+            return $satispay->getVersion();
+        }
+        return self::VERSION_UNDEFINED;
     }
 }

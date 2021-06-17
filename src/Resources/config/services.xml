@@ -83,6 +83,7 @@
             <argument type="service" id="Satispay\System\Config"/>
             <argument type="service" id="router"/>
             <argument type="service" id="Satispay\Helper\Currency"/>
+            <argument type="service" id="plugin.repository"/>
         </service>
 
         <service id="Satispay\Helper\Currency">
