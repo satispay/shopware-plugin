@@ -63,6 +63,7 @@ class PaymentController extends AbstractController
 
     /**
      * @Route("/api/_action/satispay/payment-details/{orderId}/{paymentId}", name="api.action.satispay.staus", methods={"GET"})
+     * @Route("/api/v{version}/_action/satispay/payment-details/{orderId}/{paymentId}", name="api.action.satispay.staus.version", methods={"GET"})
      */
     public function paymentDetails(string $orderId, string $paymentId, Context $context): JsonResponse
     {
@@ -78,6 +79,7 @@ class PaymentController extends AbstractController
 
     /**
      * @Route("/api/_action/satispay/refund-payment/{orderId}/{paymentId}", name="api.action.satispay.payment-refund", methods={"POST"})
+     * @Route("/api/v{version}/_action/satispay/refund-payment/{orderId}/{paymentId}", name="api.action.satispay.payment-refund.version", methods={"POST"})
      *
      * @throws \Exception
      */

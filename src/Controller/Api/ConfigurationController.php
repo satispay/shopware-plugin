@@ -49,6 +49,7 @@ class ConfigurationController extends AbstractController
 
     /**
      * @Route("/api/_action/satispay/activate", name="api.action.satispay.activate", methods={"GET"})
+     * @Route("/api/v{version}/_action/satispay/activate", name="api.action.satispay.activate.version", methods={"GET"})
      */
     public function activate(Request $request, Context $context): JsonResponse
     {
