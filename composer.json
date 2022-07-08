@@ -3,7 +3,7 @@
     "description": "Satispay Shopware6 Plugin",
     "type": "shopware-platform-plugin",
     "license": "MIT",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "autoload": {
         "psr-4": {
             "Satispay\\": "src/"
@@ -31,11 +31,11 @@
     "extra": {
         "shopware-plugin-class": "Satispay\\Satispay",
         "label": {
-            "de-DE": "Satispay payment plugin",
-            "en-GB": "Satispay payment plugin"
+            "de-DE": "Satispay",
+            "en-GB": "Satispay"
         },
         "description": {
-            "de-DE": "Save time and money by accepting payments from your customers with Satispay. Free, simple, secure! #doitsmart",
+            "de-DE": "Spare Zeit und Geld, indem du Zahlungen von deinen Kunden mit Satispay akzeptierst. Kostenlos, einfach, sicher! #doitsmart",
             "en-GB": "Save time and money by accepting payments from your customers with Satispay. Free, simple, secure! #doitsmart"
         },
         "manufacturerLink": {
