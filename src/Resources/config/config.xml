@@ -35,7 +35,10 @@
         </input-field>
         <component name="satispay-config-restriction-saleschannel">
             <name>configRestrictionSalesChannel</name>
-        </component>
+   	    </component>
+    	<component name="satispay-config-check-button">
+		    <name>configTest</name>
+	    </component>
     </card>
     <card>
         <title>Functions</title>
