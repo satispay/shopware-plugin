@@ -181,7 +181,12 @@ class PaymentWrapperApi
         SatispayApi::setPlatformHeader('Shopware');
         // retrocompatibility with 6.1
         try {
-            $shopwareVersion = Versions::getVersion('shopware/platform');
+            if (class_exists(Versions::class)) {
+                $shopwareVersion = Versions::getVersion('shopware/platform');
+            } else {
+                // compatibility with 6.4.1.2
+                $shopwareVersion = \Composer\InstalledVersions::getVersion('shopware/core');
+            }
         } catch (\OutOfBoundsException $exception) {
             $shopwareVersion = Versions::getVersion('shopware/core');
         }

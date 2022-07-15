@@ -4,7 +4,7 @@ Satispay plugin for Shopware 6 ecommerce
 
 ## Requirements
 
-- Shopware 6.1.* or 6.2.* or 6.3.*
+- Shopware 6.1.* or 6.2.* or 6.3.* or 6.4.*
 - Satispay payment method is allowed only for EURO transactions. 
 
 ## Installation
@@ -29,7 +29,7 @@ After installation, a new [rule](https://docs.shopware.com/en/shopware-6-en/sett
 ### Activate Satispay Token
 
 1. Log in as admin user
-2. Access Settings > System > Plugins
+2. Access Settings > System > Plugins for Shopware version lower than 6.4.x or access Extensions > My Extensions for Shopware version equal/higher than 6.4.x 
    
    ![Settings System PLugins](docs/assets/settings-system-plugins.png)
    
@@ -116,6 +116,7 @@ payments follow the default flow and wait for the callback).
 - 6.1
 - 6.2
 - 6.3
+- 6.4
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
