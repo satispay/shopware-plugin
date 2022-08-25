@@ -7,6 +7,7 @@
         <input-field type="bool">
             <name>sandbox</name>
             <label>Sandbox</label>
+            <label lang="de-DE">Sandbox</label>
         </input-field>
     </card>
     <card>
@@ -16,21 +17,27 @@
         <input-field>
             <name>liveActivationCode</name>
             <label>Activation code</label>
+            <label lang="de-DE">Activation code</label>
             <helpText>Insert the six characters activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
+            <helpText lang="de-DE">Insert the six characters activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
         </input-field>
         <input-field type="text">
             <name>liveActivatedCode</name>
             <label>Currently activated code</label>
+            <label lang="de-DE">Currently activated code</label>
             <disabled>true</disabled>
         </input-field>
         <input-field>
             <name>sandboxActivationCode</name>
             <label>Activation code (sandbox)</label>
+            <label lang="de-DE">Activation code (sandbox)</label>
             <helpText>Insert the six characters sandbox activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
+            <helpText lang="de-DE">Insert the six characters sandbox activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
         </input-field>
         <input-field type="text">
             <name>sandboxActivatedCode</name>
             <label>Currently activated code (sandbox)</label>
+            <label lang="de-DE">Currently activated code (sandbox)</label>
             <disabled>true</disabled>
         </input-field>
         <component name="satispay-config-restriction-saleschannel">
@@ -46,12 +53,16 @@
         <input-field type="bool">
             <name>scheduledTask</name>
             <label>Enable scheduled task to finalize unhandled payments</label>
+            <label lang="de-DE">Enable scheduled task to finalize unhandled payments</label>
             <helpText>Enable a scheduled task that finalize unhandled payments.</helpText>
+            <helpText lang="de-DE">Enable a scheduled task that finalize unhandled payments.</helpText>
         </input-field>
         <input-field type="int">
             <name>timeFrame</name>
             <label>Time frame</label>
+            <label lang="de-DE">Time frame</label>
             <helpText>Specify the time frame for the payments to be handled. Min value is 2 hours.</helpText>
+            <helpText lang="de-DE">Specify the time frame for the payments to be handled. Min value is 2 hours.</helpText>
             <defaultValue>4</defaultValue>
             <min>2</min>
         </input-field>
