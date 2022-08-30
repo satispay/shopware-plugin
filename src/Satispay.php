@@ -128,31 +128,35 @@ class Satispay extends Plugin
         }
 
         $languageRepo = $this->container->get('language.repository');
-        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','English')),Context::createDefaultContext())->first()->getId();
-        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','Deutsch')),Context::createDefaultContext())->first()->getId();
-        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','Italian')),Context::createDefaultContext())->first()->getId();
+        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','English')),Context::createDefaultContext())->first();
+        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','Deutsch')),Context::createDefaultContext())->first();
+        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','Italian')),Context::createDefaultContext())->first();
 
+        // english
+        if ($languageEN) {
+            $this->upsertTranslation($context, $paymentId, $languageEN->getId(), 'Satispay', 'Do it smart. Choose Satispay and pay with a tap!');
+        }
+        // german
+        if ($languageDE) {
+            $this->upsertTranslation($context, $paymentId, $languageDE->getId(), 'Satispay', 'Do it smart. Jetzt in einem Klick mit Satispay bezahlen!');
+        }
+        // italian
+        if ($languageIT) {
+            $this->upsertTranslation($context, $paymentId, $languageIT->getId(), 'Satispay', 'Paga smart, con Satispay hai tutto a portata di app!');
+        }
+    }
+
+    private function upsertTranslation(Context $context, $paymentId, $languageId, $name, $description)
+    {
         /** @var EntityRepositoryInterface $paymentTranslationRepository */
         $paymentTranslationRepository = $this->container->get('payment_method_translation.repository');
 
         $paymentTranslationRepository->upsert([
             [
                 'paymentMethodId' => $paymentId,
-                'languageId' => $languageEN,
-                'name' => 'Satispay',
-                'description' => 'Do it smart. Choose Satispay and pay with a tap!'
-            ],
-            [
-                'paymentMethodId' => $paymentId,
-                'languageId' => $languageDE,
-                'name' => 'Satispay',
-                'description' => 'Do it smart. Jetzt in einem Klick mit Satispay bezahlen!'
-            ],
-            [
-                'paymentMethodId' => $paymentId,
-                'languageId' => $languageIT,
-                'name' => 'Satispay',
-                'description' => 'Paga smart, con Satispay hai tutto a portata di app!'
+                'languageId' => $languageId,
+                'name' => $name,
+                'description' => $description
             ]
         ], $context);
     }
