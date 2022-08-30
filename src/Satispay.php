@@ -77,6 +77,8 @@ class Satispay extends Plugin
         /** @var EntityRepositoryInterface $paymentRepository */
         $paymentRepository = $this->container->get('payment_method.repository');
         $paymentRepository->create([$satispayPaymentData], $context);
+
+        $this->addTranslationsToPaymentMethod($context);
     }
 
     private function getPaymentMethodId($context): ?string
