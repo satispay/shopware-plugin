@@ -48,7 +48,7 @@ class Satispay extends Plugin
         $currentVersion = $updateContext->getCurrentPluginVersion();
 
         if (\version_compare($currentVersion, '1.1.1', '<')) {
-            $this->updateTo111($updateContext);
+            $this->updateTranslations($updateContext);
         }
     }
 
@@ -114,9 +114,9 @@ class Satispay extends Plugin
         $paymentRepository->update([$paymentMethod], $context);
     }
 
-    private function updateTo111(UpdateContext $updateContext): void
+    private function updateTranslations(UpdateContext $updateContext): void
     {
-        //Version 1.1.1 introduces translations for Satispay Payment description
+        //update translations for Satispay Payment checkout description
         $this->addTranslationsToPaymentMethod(
             $updateContext->getContext()
         );
@@ -130,9 +130,9 @@ class Satispay extends Plugin
         }
 
         $languageRepo = $this->container->get('language.repository');
-        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','English')),Context::createDefaultContext())->first();
-        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','Deutsch')),Context::createDefaultContext())->first();
-        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('name','Italian')),Context::createDefaultContext())->first();
+        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('iso','en-GB')),Context::createDefaultContext())->first();
+        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('iso','de-DE')),Context::createDefaultContext())->first();
+        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('iso','it-IT')),Context::createDefaultContext())->first();
 
         // english
         if ($languageEN) {
