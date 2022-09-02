@@ -130,9 +130,9 @@ class Satispay extends Plugin
         }
 
         $languageRepo = $this->container->get('language.repository');
-        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('iso','en-GB')),Context::createDefaultContext())->first();
-        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('iso','de-DE')),Context::createDefaultContext())->first();
-        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('iso','it-IT')),Context::createDefaultContext())->first();
+        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('language.translationCode.code','en-GB')),Context::createDefaultContext())->first();
+        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('language.translationCode.code','de-DE')),Context::createDefaultContext())->first();
+        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('language.translationCode.code','it-IT')),Context::createDefaultContext())->first();
 
         // english
         if ($languageEN) {
