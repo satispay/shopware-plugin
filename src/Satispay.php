@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
 
 class Satispay extends Plugin
@@ -42,6 +43,15 @@ class Satispay extends Plugin
         $this->setPaymentMethodIsActive(false, $context->getContext());
     }
 
+    public function update(UpdateContext $updateContext): void
+    {
+        $currentVersion = $updateContext->getCurrentPluginVersion();
+
+        if (\version_compare($currentVersion, '1.1.1', '<')) {
+            $this->updateTranslations($updateContext);
+        }
+    }
+
     private function addPaymentMethod(Context $context): void
     {
         $paymentMethodExists = $this->getPaymentMethodId($context);
@@ -67,6 +77,8 @@ class Satispay extends Plugin
         /** @var EntityRepositoryInterface $paymentRepository */
         $paymentRepository = $this->container->get('payment_method.repository');
         $paymentRepository->create([$satispayPaymentData], $context);
+
+        $this->addTranslationsToPaymentMethod($context);
     }
 
     private function getPaymentMethodId($context): ?string
@@ -100,5 +112,54 @@ class Satispay extends Plugin
         ];
 
         $paymentRepository->update([$paymentMethod], $context);
+    }
+
+    private function updateTranslations(UpdateContext $updateContext): void
+    {
+        //update translations for Satispay Payment checkout description
+        $this->addTranslationsToPaymentMethod(
+            $updateContext->getContext()
+        );
+    }
+
+    private function addTranslationsToPaymentMethod(Context $context)
+    {
+        $paymentId = $this->getPaymentMethodId($context);
+        if (!$paymentId) {
+            return;
+        }
+
+        $languageRepo = $this->container->get('language.repository');
+        $languageEN = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('language.translationCode.code','en-GB')),Context::createDefaultContext())->first();
+        $languageDE = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('language.translationCode.code','de-DE')),Context::createDefaultContext())->first();
+        $languageIT = $languageRepo->search((new Criteria())->addFilter(new EqualsFilter('language.translationCode.code','it-IT')),Context::createDefaultContext())->first();
+
+        // english
+        if ($languageEN) {
+            $this->upsertTranslation($context, $paymentId, $languageEN->getId(), 'Satispay', 'Do it smart. Choose Satispay and pay with a tap!');
+        }
+        // german
+        if ($languageDE) {
+            $this->upsertTranslation($context, $paymentId, $languageDE->getId(), 'Satispay', 'Do it smart. Jetzt in einem Klick mit Satispay bezahlen!');
+        }
+        // italian
+        if ($languageIT) {
+            $this->upsertTranslation($context, $paymentId, $languageIT->getId(), 'Satispay', 'Paga smart, con Satispay hai tutto a portata di app!');
+        }
+    }
+
+    private function upsertTranslation(Context $context, $paymentId, $languageId, $name, $description)
+    {
+        /** @var EntityRepositoryInterface $paymentTranslationRepository */
+        $paymentTranslationRepository = $this->container->get('payment_method_translation.repository');
+
+        $paymentTranslationRepository->upsert([
+            [
+                'paymentMethodId' => $paymentId,
+                'languageId' => $languageId,
+                'name' => $name,
+                'description' => $description
+            ]
+        ], $context);
     }
 }
