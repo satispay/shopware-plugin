@@ -1,11 +1,11 @@
 {
     "satispay-payments": {
         "general": {
-            "mainMenuItemGeneral": "Satispay Payments",
-            "descriptionTextModule": "Satispay Payments"
+            "mainMenuItemGeneral": "Satispay",
+            "descriptionTextModule": "Save time and money by accepting payments from your customers with Satispay. Free, simple, secure! #doitsmart"
         },
         "paymentDetails": {
-            "title" : "Status",
+            "title" : "Payment details",
             "buttons": {
                 "label": {
                     "refund": "Make a refund"
@@ -16,7 +16,7 @@
             },
             "errorPage": {
                 "title": "Error",
-                "subline": "There was an error with the fetch of the details"
+                "subline": "An error occurred while retrieving the payment details."
             },
             "description": {
                 "status" : "Status",
@@ -27,10 +27,10 @@
             },
             "modal": {
                 "refund": {
-                    "title": "Refund form",
+                    "title": "Refund",
                     "amount":{
                         "label":  "Amount",
-                        "helpText": "Amount to refund for the current order. Leave empty to refund the total amount.",
+                        "helpText": "Amount to refund for the current order.",
                         "helpTextEmpty": "Leave empty to refund the total amount.",
                         "helpTextDecimals": "Decimals must be divided with a dot."
                     },
@@ -38,7 +38,7 @@
                 },
                 "notification": {
                     "success": "Refund approved",
-                    "error": "An error occurred. Please retry or contact your support"
+                    "error": "An error occurred. Please retry or contact your support."
                 }
             }
         }
@@ -47,7 +47,7 @@
         "activateButton" : "Activate",
         "notification": {
             "success": "Activation processed",
-            "error": "An error occurred. Please retry or contact your support"
+            "error": "An error occurred. Please retry or contact your support."
         }
     }
 }

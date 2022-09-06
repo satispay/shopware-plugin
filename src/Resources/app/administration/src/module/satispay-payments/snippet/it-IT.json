@@ -1,0 +1,53 @@
+{
+    "satispay-payments": {
+        "general": {
+            "mainMenuItemGeneral": "Satispay",
+            "descriptionTextModule": "Risparmia tempo e denaro ricevendo pagamenti dai tuoi clienti con Satispay. Gratuita, semplice, sicura. #doitsmart"
+        },
+        "paymentDetails": {
+            "title" : "Dettagli pagamento",
+            "buttons": {
+                "label": {
+                    "refund": "Effettua un rimborso"
+                }
+            },
+            "status": {
+                "heading": "Pagamento"
+            },
+            "errorPage": {
+                "title": "Errore",
+                "subline": "Si è verificato un errore durante il recupero dei dettagli di pagamento."
+            },
+            "description": {
+                "status" : "Stato",
+                "amount" : "Importo",
+                "currency": "Valuta",
+                "type": "Tipologia",
+                "flow": "Flusso"
+            },
+            "modal": {
+                "refund": {
+                    "title": "Rimborso",
+                    "amount":{
+                        "label":  "Importo",
+                        "helpText": "Importo da rimborsare per l'ordine corrente.",
+                        "helpTextEmpty": "Lasciare vuoto per rimborsare l'intero importo.",
+                        "helpTextDecimals": "I decimali vanno divisi con il punto."
+                    },
+                    "confirmButton": "Effettua rimborso"
+                },
+                "notification": {
+                    "success": "Rimborso eseguito",
+                    "error": "Si è verificato un errore. Riprova o contatta il supporto."
+                }
+            }
+        }
+    },
+    "satispay-config": {
+        "activateButton" : "Attiva",
+        "notification": {
+            "success": "Attivazione effettuata",
+            "error": "Si è verificato un errore. Riprova o contatta il supporto."
+        }
+    }
+}

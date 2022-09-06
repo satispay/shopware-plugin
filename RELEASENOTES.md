@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/) and to [keepachangelog.com](http://keepachangelog.com/).
 As a convention, we sort changes documentation under the related changed module except for the meta project.
 
+## 1.1.1
+- Update translations for EN, DE and IT
+
 ## 1.1.0
 - Support to Shopware 6.4.x
 

@@ -1,0 +1,53 @@
+{
+    "satispay-payments": {
+        "general": {
+            "mainMenuItemGeneral": "Satispay",
+            "descriptionTextModule": "Spare Zeit und Geld, indem du Zahlungen von deinen Kunden mit Satispay akzeptierst. Kostenlos, einfach, sicher! #doitsmart"
+        },
+        "paymentDetails": {
+            "title" : "Zahlungsdetails",
+            "buttons": {
+                "label": {
+                    "refund": "Eine Rückerstattung machen"
+                }
+            },
+            "status": {
+                "heading": "Zahlung"
+            },
+            "errorPage": {
+                "title": "Fehler",
+                "subline": "Beim Abrufen der Zahlungsdetails ist ein Fehler aufgetreten."
+            },
+            "description": {
+                "status" : "Status",
+                "amount" : "Betrag",
+                "currency": "Währung",
+                "type": "Art",
+                "flow": "Fluss"
+            },
+            "modal": {
+                "refund": {
+                    "title": "Rückerstattung",
+                    "amount":{
+                        "label":  "Betrag",
+                        "helpText": "Zu erstattender Betrag für die aktuelle Bestellung.",
+                        "helpTextEmpty": "Leer lassen, um den Gesamtbetrag zu erstatten.",
+                        "helpTextDecimals": "Die Dezimalstellen müssen mit dem Punkt dividiert werden."
+                    },
+                    "confirmButton": "Eine Rückerstattung machen"
+                },
+                "notification": {
+                    "success": "Rückerstattung ausgeführt",
+                    "error": "Es ist ein Fehler aufgetreten. Bitte versuche es erneut oder kontaktiere deinen Support."
+                }
+            }
+        }
+    },
+    "satispay-config": {
+        "activateButton" : "Aktivieren",
+        "notification": {
+            "success": "Aktivierung abgeschlossen",
+            "error": "Es ist ein Fehler aufgetreten. Bitte versuche es erneut oder kontaktiere deinen Support."
+        }
+    }
+}

@@ -5,6 +5,8 @@ import './component/satispay-payment-action';
 
 
 import enGB from './snippet/en-GB.json';
+import deDE from './snippet/de-DE.json';
+import itIT from './snippet/it-IT.json';
 
 const { Module } = Shopware;
 
@@ -19,7 +21,9 @@ Module.register('satispay-payment', {
     icon: 'default-action-settings',
 
     snippets: {
-        'en-GB': enGB
+        'en-GB': enGB,
+        'de-DE': deDE,
+        'it-IT': itIT
     },
 
     routeMiddleware(next, currentRoute) {

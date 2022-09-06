@@ -163,7 +163,6 @@ class SatispayPaymentsHandler extends ScheduledTaskHandler
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('id', $salesChannelId));
         $salesChannel = $this->salesChannelRepository->search($criteria, $context)->first();
-        //todo try catch
         try {
             $this->finalizeHelper->finalizeTransaction($transaction, $satispayPaymentId, $salesChannel, $context);
         } catch (\Exception $e) {

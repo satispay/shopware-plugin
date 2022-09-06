@@ -2,35 +2,50 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
     <card>
-        <title>Modes</title>
-        <title lang="de-DE">Sandbox</title>
+        <title>Sandbox mode</title>
+        <title lang="de-DE">Sandbox-Modus</title>
+        <title lang="it-IT">Modalità Sandbox</title>
         <input-field type="bool">
             <name>sandbox</name>
-            <label>Sandbox</label>
+            <label>Enable Sandbox mode</label>
+            <label lang="de-DE">Aktiviere den Sandbox-Modus</label>
+            <label lang="it-IT">Abilita la modalità Sandbox</label>
         </input-field>
     </card>
     <card>
-        <title>Token</title>
-        <title lang="de-DE">Token</title>
-
+        <title>Activation code</title>
+        <title lang="de-DE">Aktivierungscode</title>
+        <title lang="it-IT">Codice di attivazione</title>
         <input-field>
             <name>liveActivationCode</name>
-            <label>Activation code</label>
-            <helpText>Insert the six characters activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
+            <label>Get a six characters activation code from Online Shop section on Satispay Dashboard.</label>
+            <label lang="de-DE">Du erhältst einen sechsstelligen Aktivierungscode im Bereich Online Shop auf dem Satispay Dashboard.</label>
+            <label lang="it-IT">Ottieni un codice di attivazione a sei caratteri dalla sezione Negozi Online della Dashboard Satispay.</label>
+            <helpText>Save configuration to enable the 'Activate' button.</helpText>
+            <helpText lang="de-DE">Speichere die Konfiguration, um die Schaltfläche 'Aktivieren' zu aktivieren.</helpText>
+            <helpText lang="it-IT">Salva la configurazione per abilitare il pulsante 'Attiva'.</helpText>
         </input-field>
         <input-field type="text">
             <name>liveActivatedCode</name>
-            <label>Currently activated code</label>
+            <label>Activation code enabled</label>
+            <label lang="de-DE">Aktivierungscode aktiviert</label>
+            <label lang="it-IT">Codice di attivazione abilitato</label>
             <disabled>true</disabled>
         </input-field>
         <input-field>
             <name>sandboxActivationCode</name>
-            <label>Activation code (sandbox)</label>
-            <helpText>Insert the six characters sandbox activation code from Online Shop section on Satispay Dashboard. Save configuration to enable the 'Activate' button.</helpText>
+            <label>Get a six characters activation code (Sandbox) from Satispay support</label>
+            <label lang="de-DE">Erhalte einen sechsstelligen Aktivierungscode (Sandbox) vom Satispay-Support</label>
+            <label lang="it-IT">Ottieni un codice di attivazione a sei caratteri (Sandbox) dal supporto Satispay.</label>
+            <helpText>Save configuration to enable the 'Activate' button.</helpText>
+            <helpText lang="de-DE">Speichere die Konfiguration, um die Schaltfläche 'Aktivieren' zu aktivieren.</helpText>
+            <helpText lang="it-IT">Salva la configurazione per abilitare il pulsante 'Attiva'.</helpText>
         </input-field>
         <input-field type="text">
             <name>sandboxActivatedCode</name>
-            <label>Currently activated code (sandbox)</label>
+            <label>Activation code enabled</label>
+            <label lang="de-DE">Aktivierungscode aktiviert</label>
+            <label lang="it-IT">Codice di attivazione abilitato</label>
             <disabled>true</disabled>
         </input-field>
         <component name="satispay-config-restriction-saleschannel">
@@ -41,17 +56,26 @@
 	    </component>
     </card>
     <card>
-        <title>Functions</title>
-        <title lang="de-DE">Scheduled Task</title>
+        <title>Finalize unhandled payments</title>
+        <title lang="de-DE">Schließe nicht verwaltete Zahlungen ab</title>
+        <title lang="it-IT">Finalizza pagamenti non gestiti</title>
         <input-field type="bool">
             <name>scheduledTask</name>
-            <label>Enable scheduled task to finalize unhandled payments</label>
-            <helpText>Enable a scheduled task that finalize unhandled payments.</helpText>
+            <label>Enable cron</label>
+            <label lang="de-DE">Cron aktivieren</label>
+            <label lang="it-IT">Abilita cron</label>
+            <helpText>Finalize unhandled Satispay payments with a cron.</helpText>
+            <helpText lang="de-DE">Schließe nicht verwaltete Satispay-Zahlungen über Cron ab.</helpText>
+            <helpText lang="it-IT">Finalizza tramite cron i pagamenti Satispay non gestiti.</helpText>
         </input-field>
         <input-field type="int">
             <name>timeFrame</name>
-            <label>Time frame</label>
-            <helpText>Specify the time frame for the payments to be handled. Min value is 2 hours.</helpText>
+            <label>Finalize pending payments up to</label>
+            <label lang="de-DE">Ausstehende Zahlungen abschließen bis zu</label>
+            <label lang="it-IT">Finalizza i pagamenti in sospeso fino a</label>
+            <helpText>Choose a number of hours, default is four and minimum is two.</helpText>
+            <helpText lang="de-DE">Wähle eine Anzahl von Stunden aus, der Standardwert ist vier und das Minimum zwei.</helpText>
+            <helpText lang="it-IT">Scegli un numero di ore, il valore predefinito è quattro e il minimo è due.</helpText>
             <defaultValue>4</defaultValue>
             <min>2</min>
         </input-field>
