@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44fb69635845e750363b92dec10383b8",
+    "content-hash": "2e5e0bb2583fd9a4731a2db491c633ba",
     "packages": [
         {
             "name": "satispay/gbusiness-api-php-sdk",
