@@ -46,13 +46,6 @@ class FinalizeTransaction
      */
     public function execute(AsyncPaymentTransactionStruct $transaction, string $paymentId, SalesChannelContext $salesChannelContext): void
     {
-        $this->orderTransactionRepo->update([[
-            'id' => $transaction->getOrderTransaction()->getId(),
-            'customFields' => [
-                PaymentWrapperApi::PAYMENT_ID_IN_TRANSACTION_CUSTOM_FIELD => $paymentId,
-            ],
-        ]], $salesChannelContext->getContext());
-
         try {
             $satispayPayment = $this->paymentWrapperApi->getPaymentStatusOnSatispay($salesChannelContext->getSalesChannel()->getId(), $paymentId);
         } catch (\Exception $e) {

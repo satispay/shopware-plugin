@@ -69,7 +69,6 @@ class Order
             ->addFilter(new RangeFilter('order.transactions.createdAt.date',
                     [RangeFilter::GTE => $rangeStart, RangeFilter::LTE => $rangeEnd])
             )
-            //TODO less than an hour before scheduled task start
             ->addFilter(new EqualsFilter('order.transactions.paymentMethodId', $satispayPaymentId))
             //take every order in both state open and processing, for version < and > of 6.1
             ->addFilter(new EqualsAnyFilter(
