@@ -57,8 +57,8 @@
             <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
             <argument type="service" id="Satispay\Validation\SatispayConfiguration"/>
             <argument type="service" id="Satispay\Validation\Currency"/>
-            <argument type="service" id="order_transaction.repository"/>
             <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="order_transaction.repository"/>
         </service>
 
         <service id="Satispay\Handler\Api\FinalizeTransaction">
