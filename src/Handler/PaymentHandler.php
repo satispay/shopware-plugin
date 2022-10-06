@@ -11,6 +11,7 @@ use Satispay\Exception\SatispayPaymentUnacceptedException;
 use Satispay\Exception\SatispaySettingsInvalidException;
 use Satispay\Handler\Api\FinalizeTransaction;
 use Satispay\Handler\Api\PayTransaction;
+use Satispay\Helper\PaymentWrapperApi;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
@@ -45,16 +46,23 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
      */
     private $finalizeTransaction;
 
+    /**
+     * @var PaymentWrapperApi
+     */
+    protected $paymentWrapperApi;
+
     public function __construct(
         OrderTransactionStateHandler $orderTransactionStateHandler,
         PayTransaction $payTransactionHelper,
         FinalizeTransaction $finalizeTransaction,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        PaymentWrapperApi $paymentWrapperApi
     ) {
         $this->logger = $logger;
         $this->orderTransactionStateHandler = $orderTransactionStateHandler;
         $this->payTransactionHelper = $payTransactionHelper;
         $this->finalizeTransaction = $finalizeTransaction;
+        $this->paymentWrapperApi = $paymentWrapperApi;
     }
 
     /**
@@ -127,7 +135,12 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
         Request $request,
         SalesChannelContext $salesChannelContext
     ): void {
-        $paymentId = $request->get('payment_id');
+
+        try {
+            $paymentId = $this->paymentWrapperApi->getPaymentIdFromTransaction($transaction->getOrderTransaction());
+        } catch (\Exception $e) {
+            $paymentId = null;
+        }
 
         if (!$paymentId) {
             $this->logger->error(
