@@ -30,9 +30,6 @@ class PaymentWrapperApi
 
     public const PAYMENT_ID_IN_TRANSACTION_CUSTOM_FIELD = 'satispay_payment_id';
 
-    public const PAYMENT_URL_PRODUCTION = 'https://online.satispay.com/pay/';
-    public const PAYMENT_URL_SANDBOX = 'https://staging.online.satispay.com/pay/';
-
     /**
      * @var SatispayConfig
      */
