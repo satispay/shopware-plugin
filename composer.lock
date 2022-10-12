@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e5e0bb2583fd9a4731a2db491c633ba",
+    "content-hash": "6e725c6a0a7af9a7e89f96d6f9411a27",
     "packages": [
         {
             "name": "satispay/gbusiness-api-php-sdk",
@@ -67,5 +67,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
