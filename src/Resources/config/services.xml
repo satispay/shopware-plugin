@@ -10,6 +10,7 @@
             <argument type="service" id="Satispay\Handler\Api\PayTransaction"/>
             <argument type="service" id="Satispay\Handler\Api\FinalizeTransaction"/>
             <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
             <tag name="shopware.payment.method.async" />
         </service>
 
@@ -57,6 +58,7 @@
             <argument type="service" id="Satispay\Validation\SatispayConfiguration"/>
             <argument type="service" id="Satispay\Validation\Currency"/>
             <argument type="service" id="monolog.logger"/>
+            <argument type="service" id="order_transaction.repository"/>
         </service>
 
         <service id="Satispay\Handler\Api\FinalizeTransaction">

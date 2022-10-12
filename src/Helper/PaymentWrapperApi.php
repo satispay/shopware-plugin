@@ -30,9 +30,6 @@ class PaymentWrapperApi
 
     public const PAYMENT_ID_IN_TRANSACTION_CUSTOM_FIELD = 'satispay_payment_id';
 
-    public const PAYMENT_URL_PRODUCTION = 'https://online.satispay.com/pay/';
-    public const PAYMENT_URL_SANDBOX = 'https://staging.online.satispay.com/pay/';
-
     /**
      * @var SatispayConfig
      */
@@ -82,14 +79,9 @@ class PaymentWrapperApi
     /**
      * @param $payment
      */
-    public function generateRedirectPaymentUrl(string $salesChannelId, $payment): string
+    public function generateRedirectPaymentUrl($payment): string
     {
-        $satispayUrl = self::PAYMENT_URL_PRODUCTION . $payment->id;
-        if ($this->config->isSandBox($salesChannelId)) {
-            $satispayUrl = self::PAYMENT_URL_SANDBOX . $payment->id;
-        }
-
-        return $satispayUrl;
+        return $payment->redirect_url;
     }
 
     public function createPaymentPayload(AsyncPaymentTransactionStruct $transaction, Context $context): array
@@ -116,8 +108,6 @@ class PaymentWrapperApi
 
         $callback_url = sprintf('%s%s', $callback_url, '{uuid}');
 
-        $redirectUrl = sprintf('%s&%s', $redirectUrl, 'payment_id={uuid}');
-
         return [
             'flow' => 'MATCH_CODE',
             'amount_unit' => $orderTransactionAmount->getTotalPrice() * 100,
@@ -125,10 +115,10 @@ class PaymentWrapperApi
             'description' => '#' . $order->getOrderNumber(),
             'callback_url' => $callback_url,
             'external_code' => $order->getOrderNumber(),
+            'redirect_url' => $redirectUrl,
             'metadata' => [
                 'order_id' => $order->getId(),
                 'order_number' => $order->getOrderNumber(),
-                'redirect_url' => $redirectUrl,
                 'transaction_id' => $transaction->getOrderTransaction()->getId(),
             ],
         ];
