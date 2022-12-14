@@ -110,7 +110,7 @@ class PaymentWrapperApi
 
         return [
             'flow' => 'MATCH_CODE',
-            'amount_unit' => $orderTransactionAmount->getTotalPrice() * 100,
+            'amount_unit' => round($orderTransactionAmount->getTotalPrice() * 100),
             'currency' => $currency->getIsoCode(),
             'description' => '#' . $order->getOrderNumber(),
             'callback_url' => $callback_url,
