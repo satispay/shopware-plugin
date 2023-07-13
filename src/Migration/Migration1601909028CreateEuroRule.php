@@ -18,7 +18,7 @@ class Migration1601909028CreateEuroRule extends MigrationStep
     public function update(Connection $connection): void
     {
         //add rule for euro
-        $usaCountryId = $connection->executeQuery('SELECT LOWER(hex(id)) FROM currency WHERE `iso_code` = "EUR"')->fetchColumn();
+        $usaCountryId = $connection->executeQuery('SELECT LOWER(hex(id)) FROM currency WHERE `iso_code` = "EUR"')->fetchOne();
 
         $euroRuleId = Uuid::randomBytes();
         $connection->insert(
@@ -46,7 +46,7 @@ class Migration1601909028CreateEuroRule extends MigrationStep
         );
 
         //set the new rule to payment
-        $connection->executeUpdate(
+        $connection->executeStatement(
             'UPDATE payment_method SET availability_rule_id = :value where handler_identifier = :handler',
             ['value' => $euroRuleId, 'handler' => PaymentHandler::class]
         );

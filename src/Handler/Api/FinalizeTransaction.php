@@ -9,7 +9,7 @@ use Satispay\Exception\SatispayInvalidAuthorizationException;
 use Satispay\Exception\SatispayPaymentUnacceptedException;
 use Satispay\Helper\PaymentWrapperApi;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 class FinalizeTransaction
@@ -20,7 +20,7 @@ class FinalizeTransaction
     protected $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $orderTransactionRepo;
 
@@ -31,7 +31,7 @@ class FinalizeTransaction
 
     public function __construct(
         PaymentWrapperApi $paymentWrapperApi,
-        EntityRepositoryInterface $orderTransactionRepo,
+        EntityRepository $orderTransactionRepo,
         LoggerInterface $logger
     ) {
         $this->logger = $logger;

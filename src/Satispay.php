@@ -4,7 +4,7 @@ namespace Satispay;
 
 use Satispay\Handler\PaymentHandler;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Plugin;
@@ -74,7 +74,7 @@ class Satispay extends Plugin
             'afterOrderEnabled' => false,
         ];
 
-        /** @var EntityRepositoryInterface $paymentRepository */
+        /** @var EntityRepository $paymentRepository */
         $paymentRepository = $this->container->get('payment_method.repository');
         $paymentRepository->create([$satispayPaymentData], $context);
 
@@ -83,7 +83,7 @@ class Satispay extends Plugin
 
     private function getPaymentMethodId($context): ?string
     {
-        /** @var EntityRepositoryInterface $paymentRepository */
+        /** @var EntityRepository $paymentRepository */
         $paymentRepository = $this->container->get('payment_method.repository');
 
         // Fetch ID for update
@@ -96,7 +96,7 @@ class Satispay extends Plugin
 
     private function setPaymentMethodIsActive(bool $active, Context $context): void
     {
-        /** @var EntityRepositoryInterface $paymentRepository */
+        /** @var EntityRepository $paymentRepository */
         $paymentRepository = $this->container->get('payment_method.repository');
 
         $paymentMethodId = $this->getPaymentMethodId($context);
@@ -150,7 +150,7 @@ class Satispay extends Plugin
 
     private function upsertTranslation(Context $context, $paymentId, $languageId, $name, $description)
     {
-        /** @var EntityRepositoryInterface $paymentTranslationRepository */
+        /** @var EntityRepository $paymentTranslationRepository */
         $paymentTranslationRepository = $this->container->get('payment_method_translation.repository');
 
         $paymentTranslationRepository->upsert([

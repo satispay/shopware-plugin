@@ -13,7 +13,7 @@ use Satispay\Validation\Payment;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
 use Shopware\Core\Checkout\Payment\Exception\InvalidTransactionException;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
@@ -25,7 +25,7 @@ class UpdateTransaction
     protected $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $orderTransactionRepo;
 
@@ -47,7 +47,7 @@ class UpdateTransaction
     public function __construct(
         PaymentWrapperApi $paymentWrapperApi,
         Payment $paymentValidation,
-        EntityRepositoryInterface $orderTransactionRepo,
+        EntityRepository $orderTransactionRepo,
         OrderTransactionStateHandler $orderTransactionStateHandler,
         LoggerInterface $logger
     ) {

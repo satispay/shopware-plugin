@@ -12,7 +12,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Checkout\Payment\Exception\InvalidOrderException;
 use Shopware\Core\Checkout\Payment\Exception\InvalidTransactionException;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -25,7 +25,7 @@ use function number_format;
 use function round;
 
 /**
- * @RouteScope(scopes={"api"})
+ * @Route(defaults={"_routeScope"={"api"}})
  */
 class PaymentController extends AbstractController
 {
@@ -40,7 +40,7 @@ class PaymentController extends AbstractController
     protected $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $orderRepository;
 
@@ -51,7 +51,7 @@ class PaymentController extends AbstractController
 
     public function __construct(
         PaymentWrapperApi $paymentWrapperApi,
-        EntityRepositoryInterface $orderRepository,
+        EntityRepository $orderRepository,
         OrderTransactionStateHandler $orderTransactionStateHandler,
         LoggerInterface $logger
     ) {
