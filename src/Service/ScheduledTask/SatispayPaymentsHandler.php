@@ -8,7 +8,7 @@ use Satispay\Helper\Finalize;
 use Satispay\Helper\PaymentWrapperApi;
 use Satispay\System\Config as SatispayConfig;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Symfony\Component\Routing\RouterInterface;
@@ -36,11 +36,11 @@ class SatispayPaymentsHandler extends ScheduledTaskHandler
      */
     protected $finalizeHelper;
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
-    protected $scheduledTaskRepository;
+    protected EntityRepository $scheduledTaskRepository;
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $salesChannelRepository;
     /**
@@ -56,8 +56,8 @@ class SatispayPaymentsHandler extends ScheduledTaskHandler
         SatispayConfiguration $configValidation,
         Order $orderHelper,
         Finalize $finalizeHelper,
-        EntityRepositoryInterface $scheduledTaskRepository,
-        EntityRepositoryInterface $salesChannelRepository,
+        EntityRepository $scheduledTaskRepository,
+        EntityRepository $salesChannelRepository,
         LoggerInterface $logger
     )
     {

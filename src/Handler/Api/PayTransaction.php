@@ -12,7 +12,7 @@ use Satispay\Validation\Currency;
 use Satispay\Validation\SatispayConfiguration;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 class PayTransaction
 {
@@ -37,7 +37,7 @@ class PayTransaction
     protected $configValidation;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $orderTransactionRepo;
 
@@ -46,7 +46,7 @@ class PayTransaction
         SatispayConfiguration $configValidation,
         Currency $currencyValidation,
         LoggerInterface $logger,
-        EntityRepositoryInterface $orderTransactionRepo
+        EntityRepository $orderTransactionRepo
     ) {
         $this->logger = $logger;
         $this->paymentWrapperApi = $paymentWrapperApi;

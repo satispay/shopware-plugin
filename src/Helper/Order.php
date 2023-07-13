@@ -3,7 +3,7 @@
 namespace Satispay\Helper;
 
 use Satispay\Handler\PaymentHandler;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -14,11 +14,11 @@ use Satispay\System\Config as SatispayConfig;
 class Order
 {
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $orderRepository;
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $paymentRepository;
     /**
@@ -28,13 +28,13 @@ class Order
 
     /**
      * Order constructor.
-     * @param EntityRepositoryInterface $orderRepository
-     * @param EntityRepositoryInterface $paymentRepository
+     * @param EntityRepository $orderRepository
+     * @param EntityRepository $paymentRepository
      */
     public function __construct(
         SatispayConfig $config,
-        EntityRepositoryInterface $orderRepository,
-        EntityRepositoryInterface $paymentRepository
+        EntityRepository $orderRepository,
+        EntityRepository $paymentRepository
     ) {
         $this->config = $config;
         $this->orderRepository = $orderRepository;

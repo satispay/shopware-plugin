@@ -6,21 +6,21 @@ namespace Satispay\Helper;
 
 use Satispay\Exception\SatispayCurrencyException;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\Currency\CurrencyEntity;
 
 class Currency
 {
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $currencyRepository;
 
     protected $currencyList = [];
 
     public function __construct(
-        EntityRepositoryInterface $currencyRepository
+        EntityRepository $currencyRepository
     ) {
         $this->currencyRepository = $currencyRepository;
     }

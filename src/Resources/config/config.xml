@@ -48,9 +48,6 @@
             <label lang="it-IT">Codice di attivazione abilitato</label>
             <disabled>true</disabled>
         </input-field>
-        <component name="satispay-config-restriction-saleschannel">
-            <name>configRestrictionSalesChannel</name>
-   	    </component>
     	<component name="satispay-config-check-button">
 		    <name>configTest</name>
 	    </component>

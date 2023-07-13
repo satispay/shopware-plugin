@@ -5,7 +5,7 @@ namespace Satispay\Controller\Api;
 use Psr\Log\LoggerInterface;
 use Satispay\Handler\Api\ActivateCode;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @RouteScope(scopes={"api"})
+ * @Route(defaults={"_routeScope"={"api"}})
  */
 class ConfigurationController extends AbstractController
 {
@@ -28,7 +28,7 @@ class ConfigurationController extends AbstractController
     private $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $salesChannelRepository;
 
@@ -39,7 +39,7 @@ class ConfigurationController extends AbstractController
 
     public function __construct(
         ActivateCode $helperConfig,
-        EntityRepositoryInterface $salesChannelRepository,
+        EntityRepository $salesChannelRepository,
         LoggerInterface $logger
     ) {
         $this->logger = $logger;
