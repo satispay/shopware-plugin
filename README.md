@@ -126,6 +126,7 @@ payments follow the default flow and wait for the callback).
 - 6.3
 - 6.4
 - 6.5
+- 6.6
 
 ## Contributing
 
