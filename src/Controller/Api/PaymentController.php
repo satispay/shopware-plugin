@@ -4,29 +4,26 @@ namespace Satispay\Controller\Api;
 
 use Psr\Log\LoggerInterface;
 use Satispay\Helper\PaymentWrapperApi;
-use Shopware\Core\Checkout\Cart\Exception\OrderNotFoundException;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Shopware\Core\Checkout\Order\OrderEntity;
-use Shopware\Core\Checkout\Payment\Exception\InvalidOrderException;
-use Shopware\Core\Checkout\Payment\Exception\InvalidTransactionException;
+use Shopware\Core\Checkout\Order\OrderException;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\Framework\Log\Package;
 use function number_format;
 use function round;
 
-/**
- * @Route(defaults={"_routeScope"={"api"}})
- */
+#[Route(defaults: ['_routeScope' => ['api']])]
+#[Package('storefront')]
 class PaymentController extends AbstractController
 {
     /**
@@ -61,26 +58,23 @@ class PaymentController extends AbstractController
         $this->logger = $logger;
     }
 
-    /**
-     * @Route("/api/_action/satispay/payment-details/{orderId}/{paymentId}", name="api.action.satispay.staus", methods={"GET"})
-     * @Route("/api/v{version}/_action/satispay/payment-details/{orderId}/{paymentId}", name="api.action.satispay.staus.version", methods={"GET"})
-     */
+    #[Route(path: '/api/_action/satispay/payment-details/{orderId}/{paymentId}', name: 'api.action.satispay.status', methods: ['GET'])]
+    #[Route(path: '/api/v{version}/_action/satispay/payment-details/{orderId}/{paymentId}', name: 'api.action.satispay.staus.version', methods: ['GET'])]
     public function paymentDetails(string $orderId, string $paymentId, Context $context): JsonResponse
     {
         try {
             $salesChannelId = $this->getSalesChannelIdByOrderId($orderId, $context);
             $response = $this->paymentWrapperApi->getPaymentStatusOnSatispay($salesChannelId, $paymentId);
-        } catch (OrderNotFoundException $e) {
+        } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse($response);
     }
 
+    #[Route(path: '/api/_action/satispay/refund-payment/{orderId}/{paymentId}', name: 'api.action.satispay.payment-refund', methods: ['POST'])]
+    #[Route(path: '/api/v{version}/_action/satispay/refund-payment/{orderId}/{paymentId}', name: 'api.action.satispay.payment-refund.version', methods: ['POST'])]
     /**
-     * @Route("/api/_action/satispay/refund-payment/{orderId}/{paymentId}", name="api.action.satispay.payment-refund", methods={"POST"})
-     * @Route("/api/v{version}/_action/satispay/refund-payment/{orderId}/{paymentId}", name="api.action.satispay.payment-refund.version", methods={"POST"})
-     *
      * @throws \Exception
      */
     public function refundPayment(
@@ -123,9 +117,9 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @throws OrderNotFoundException
-     *
-     * @return string
+     * @param string $orderId
+     * @param Context $context
+     * @return string|null
      */
     private function getSalesChannelIdByOrderId(string $orderId, Context $context): ?string
     {
@@ -136,9 +130,9 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @throws OrderNotFoundException
-     *
-     * @return OrderEntity
+     * @param string $orderId
+     * @param Context $context
+     * @return OrderEntity|null
      */
     private function getOrderById(string $orderId, Context $context): ?OrderEntity
     {
@@ -146,17 +140,16 @@ class PaymentController extends AbstractController
         $order = $this->orderRepository->search(new Criteria([$orderId]), $context)->first();
 
         if ($order === null) {
-            throw new OrderNotFoundException($orderId);
+            throw OrderException::orderNotFound($orderId);
         }
 
         return $order;
     }
 
     /**
-     * @throws InvalidTransactionException
-     * @throws OrderNotFoundException
-     * @throws InvalidOrderException
-     * @noinspection TypeUnsafeComparisonInspection
+     * @param string $orderId
+     * @param Context $context
+     * @return void
      */
     private function applyRefundStateToPayment(string $orderId, Context $context): void
     {
@@ -169,33 +162,36 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @throws OrderNotFoundException
-     * @throws InvalidOrderException
+     * @param string $orderId
+     * @param Context $context
+     * @return OrderTransactionEntity
      */
     private function getOrderTransaction(string $orderId, Context $context): OrderTransactionEntity
     {
         $criteria = new Criteria([$orderId]);
+        $criteria->addAssociation('transactions.stateMachineState');
         $criteria->addAssociation('transactions');
         $criteria->getAssociation('transactions')->addSorting(new FieldSorting('createdAt'));
         /** @var OrderEntity|null $order */
         $order = $this->orderRepository->search($criteria, $context)->first();
 
         if ($order === null) {
-            throw new OrderNotFoundException($orderId);
+            throw OrderException::orderNotFound($orderId);
         }
 
         $transactionCollection = $order->getTransactions();
 
         if ($transactionCollection === null) {
-            throw new InvalidOrderException($orderId);
+            throw OrderException::orderNotFound($orderId);
         }
 
         $transaction = $transactionCollection->last();
 
         if ($transaction === null) {
-            throw new InvalidOrderException($orderId);
+            throw OrderException::orderNotFound($orderId);
         }
 
         return $transaction;
     }
 }
+

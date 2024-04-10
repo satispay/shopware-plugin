@@ -11,7 +11,9 @@ use Satispay\Helper\PaymentWrapperApi;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\Framework\Log\Package;
 
+#[Package('checkout')]
 class FinalizeTransaction
 {
     /**
@@ -42,7 +44,6 @@ class FinalizeTransaction
     /**
      * @throws SatispayInvalidAuthorizationException
      * @throws SatispayPaymentUnacceptedException
-     * @noinspection TypeUnsafeComparisonInspection
      */
     public function execute(AsyncPaymentTransactionStruct $transaction, string $paymentId, SalesChannelContext $salesChannelContext): void
     {

@@ -8,16 +8,15 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\Framework\Log\Package;
 
-/**
- * @Route(defaults={"_routeScope"={"api"}})
- */
+#[Route(defaults: ['_routeScope' => ['api']])]
+#[Package('storefront')]
 class ConfigurationController extends AbstractController
 {
     public const STOREFRONT_SALESCHANNEL_TYPE_ID = '8a243080f92e4c719546314b577cf82b';
@@ -47,10 +46,8 @@ class ConfigurationController extends AbstractController
         $this->helperConfig = $helperConfig;
     }
 
-    /**
-     * @Route("/api/_action/satispay/activate", name="api.action.satispay.activate", methods={"GET"})
-     * @Route("/api/v{version}/_action/satispay/activate", name="api.action.satispay.activate.version", methods={"GET"})
-     */
+    #[Route(path: '/api/_action/satispay/activate', name: 'api.action.satispay.activate', methods: ['GET'])]
+    #[Route(path: '/api/v{version}/_action/satispay/activate', name: 'api.action.satispay.activate.version', methods: ['GET'])]
     public function activate(Request $request, Context $context): JsonResponse
     {
         try {

@@ -13,17 +13,16 @@ use Satispay\Handler\Api\FinalizeTransaction;
 use Satispay\Handler\Api\PayTransaction;
 use Satispay\Helper\PaymentWrapperApi;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
-use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
 use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\AsynchronousPaymentHandlerInterface;
-use Shopware\Core\Checkout\Payment\Exception\AsyncPaymentFinalizeException;
-use Shopware\Core\Checkout\Payment\Exception\AsyncPaymentProcessException;
-use Shopware\Core\Checkout\Payment\Exception\CustomerCanceledAsyncPaymentException;
+use Shopware\Core\Checkout\Payment\PaymentException;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Shopware\Core\Framework\Log\Package;
 
+#[Package('checkout')]
 class PaymentHandler implements AsynchronousPaymentHandlerInterface
 {
     /**
@@ -87,7 +86,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
             //block the execution with AsyncPaymentProcessException
-            throw new AsyncPaymentProcessException(
+            throw PaymentException::asyncProcessInterrupted(
                 $transaction->getOrderTransaction()->getId(),
                 'Satispay gateway not configured!'
             );
@@ -103,7 +102,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new AsyncPaymentProcessException(
+            throw PaymentException::asyncProcessInterrupted(
                 $transaction->getOrderTransaction()->getId(),
                 'Currency not valid!'
             );
@@ -118,9 +117,9 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new AsyncPaymentProcessException(
+            throw PaymentException::asyncProcessInterrupted(
                 $transaction->getOrderTransaction()->getId(),
-                'It is not possible pay with Satispay payment gateway'
+                'It is not possible to pay with Satispay payment gateway'
             );
         }
 
@@ -151,7 +150,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new AsyncPaymentFinalizeException(
+            throw PaymentException::asyncFinalizeInterrupted(
                 $transaction->getOrderTransaction()->getId(),
                 'Missing payment id in satispay response'
             );
@@ -159,24 +158,10 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
 
         try {
             $this->finalizeTransaction->execute($transaction, $paymentId, $salesChannelContext);
-            if ($transaction->getOrderTransaction()->getStateMachineState() === null) {
-                throw new AsyncPaymentFinalizeException(
-                    $transaction->getOrderTransaction()->getId(),
-                    'Missing state machine'
-                );
-            }
-
-            $paymentStatus = $transaction->getOrderTransaction()->getStateMachineState()->getTechnicalName();
-            // retrocompatibility with 6.1
-            if ($paymentStatus === OrderTransactionStates::STATE_OPEN
-                && method_exists($this->orderTransactionStateHandler, 'process')
-                && is_callable([$this->orderTransactionStateHandler, 'process'])
-            ) {
-                $this->orderTransactionStateHandler->process(
-                    $transaction->getOrderTransaction()->getId(),
-                    $salesChannelContext->getContext()
-                );
-            }
+            $this->orderTransactionStateHandler->process(
+                $transaction->getOrderTransaction()->getId(),
+                $salesChannelContext->getContext()
+            );
         } catch (SatispayPaymentUnacceptedException $e) {
             $this->logger->error(
                 self::class . ' Satispay payment not accepted',
@@ -186,7 +171,7 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new CustomerCanceledAsyncPaymentException($transaction->getOrderTransaction()->getId(), '');
+            throw PaymentException::customerCanceled($transaction->getOrderTransaction()->getId(), '');
         } catch (SatispayInvalidAuthorizationException $e) {
             $this->logger->error(
                 self::class . ' Satispay not correctly configured',
@@ -196,9 +181,22 @@ class PaymentHandler implements AsynchronousPaymentHandlerInterface
                 ]
             );
 
-            throw new AsyncPaymentFinalizeException(
+            throw PaymentException::asyncFinalizeInterrupted(
                 $transaction->getOrderTransaction()->getId(),
                 'Satispay not correctly configured'
+            );
+        } catch (\Exception $e) {
+            $this->logger->error(
+                self::class . ' Satispay - There has been an error paying the order',
+                [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTrace(),
+                ]
+            );
+
+            throw PaymentException::asyncFinalizeInterrupted(
+                $transaction->getOrderTransaction()->getId(),
+                'Satispay - There has been an error paying the order'
             );
         }
     }
