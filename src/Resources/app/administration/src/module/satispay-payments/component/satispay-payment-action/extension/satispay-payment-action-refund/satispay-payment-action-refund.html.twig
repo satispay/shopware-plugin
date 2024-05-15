@@ -5,9 +5,9 @@
         :title="$tc(`satispay-payments.paymentDetails.modal.refund.title`)"
         @modal-close="$emit('modal-close')">
         <sw-number-field
+            v-model:value="refundAmount"
             :max="refundableAmount"
             :min="0"
-            v-model="refundAmount"
             :label="$tc('satispay-payments.paymentDetails.modal.refund.amount.label')"
             :helpText="$tc('satispay-payments.paymentDetails.modal.refund.amount.helpText')">
             <template #suffix>

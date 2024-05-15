@@ -83,10 +83,15 @@ class PaymentController extends AbstractController
         string $paymentId,
         Context $context
     ): JsonResponse {
-        $amount = (float) $request->request->get('refundAmount');
-        $amount = round($amount, 2);
-        $amount = number_format($amount, 2);
-        $amount *= 100;
+
+        $amount = (string) $request->request->get('refundAmount');
+        if (preg_match('/[,.]/', $amount)) {
+            $amount = preg_replace('/(\d+[,.]\d{2}).*/', '$1', $amount); // limit to two digits after comma
+        } else {
+            $amount .= '.00';
+        }
+        $amount = preg_replace('/[,.]/', '', $amount); // remove comma or dot
+        $amount = (int) $amount; // convert the amount to int (cents)
 
         try {
             /** @var OrderEntity $order */
