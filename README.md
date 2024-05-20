@@ -13,7 +13,7 @@ Satispay plugin for Shopware 6 ecommerce
 
 Use the composer require command to add it to your ecommerce
 
-For Shopware versions lower than Shopware 6.5:
+For Shopware versions <u>**lower**</u> than Shopware 6.5:
 ```bash
 composer require satispay/shopware6-plugin:1.2.0
 ```
@@ -21,7 +21,7 @@ For Shopware 6.5:
 ```bash
 composer require satispay/shopware6-plugin:2.2.0
 ```
-For Shopware 6.6 and over:
+For Shopware 6.6 <u>**and over</u>**:
 ```bash
 composer require satispay/shopware6-plugin
 ```
