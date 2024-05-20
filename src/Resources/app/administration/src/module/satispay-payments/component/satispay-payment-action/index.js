@@ -2,9 +2,14 @@ import template from './satispay-payment-actions.html.twig';
 import './extension/satispay-payment-action-refund';
 
 const { Component } = Shopware;
+const { mapState } = Component.getComponentHelper();
 
 Component.register('satispay-payment-actions', {
     template,
+
+    inject: [
+        'repositoryFactory',
+    ],
 
     data() {
         return {
@@ -15,21 +20,32 @@ Component.register('satispay-payment-actions', {
     props: {
         paymentResource: {
             type: Object,
-            required: true
+            required: true,
         },
-        order: {
-            type: Object,
-            required: true
-        }
     },
+
     computed: {
-        notRefundable() {
+        ...mapState('swOrderDetail', ['order']),
+
+        orderTransaction() {
             const lastTransactionIndex = this.order.transactions.length - 1;
-            const transaction = this.order.transactions[lastTransactionIndex];
-            const technicalName = transaction.stateMachineState.technicalName;
+            return this.order.transactions[lastTransactionIndex];
+        },
+
+        isStateRefundable() {
             const refundableStates = ['paid', 'paid_partially', 'refunded'];
-            const canRefund = refundableStates.indexOf(technicalName) > -1;
+            return refundableStates.indexOf(this.orderTransaction.stateMachineState.technicalName) > -1;
+        },
+
+        notRefundable() {
+            const canRefund = this.isStateRefundable;
             return (this.paymentResource.amount_unit <= 0 || this.paymentResource.status != 'ACCEPTED' || !canRefund);
         }
-    }
+    },
+
+    watch: {
+        order: {
+            immediate: true,
+        },
+    },
 });

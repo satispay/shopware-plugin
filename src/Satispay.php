@@ -14,33 +14,35 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
+use Shopware\Core\Framework\Log\Package;
 
+#[Package('checkout')]
 class Satispay extends Plugin
 {
-    public function install(InstallContext $context): void
+    public function install(InstallContext $installContext): void
     {
-        parent::install($context);
-        $this->addPaymentMethod($context->getContext());
+        parent::install($installContext);
+        $this->addPaymentMethod($installContext->getContext());
     }
 
-    public function uninstall(UninstallContext $context): void
+    public function uninstall(UninstallContext $uninstallContext): void
     {
-        parent::uninstall($context);
+        parent::uninstall($uninstallContext);
         // Only set the payment method to inactive when uninstalling. Removing the payment method would
         // cause data consistency issues, since the payment method might have been used in several orders
-        $this->setPaymentMethodIsActive(false, $context->getContext());
+        $this->setPaymentMethodIsActive(false, $uninstallContext->getContext());
     }
 
-    public function activate(ActivateContext $context): void
+    public function activate(ActivateContext $activateContext): void
     {
-        parent::activate($context);
-        $this->setPaymentMethodIsActive(true, $context->getContext());
+        parent::activate($activateContext);
+        $this->setPaymentMethodIsActive(true, $activateContext->getContext());
     }
 
-    public function deactivate(DeactivateContext $context): void
+    public function deactivate(DeactivateContext $deactivateContext): void
     {
-        parent::deactivate($context);
-        $this->setPaymentMethodIsActive(false, $context->getContext());
+        parent::deactivate($deactivateContext);
+        $this->setPaymentMethodIsActive(false, $deactivateContext->getContext());
     }
 
     public function update(UpdateContext $updateContext): void
@@ -89,9 +91,7 @@ class Satispay extends Plugin
         // Fetch ID for update
         $paymentCriteria = (new Criteria())->addFilter(new EqualsFilter('handlerIdentifier', PaymentHandler::class));
 
-        $paymentIds = $paymentRepository->searchIds($paymentCriteria, $context);
-
-        return $paymentIds->firstId();
+        return $paymentRepository->searchIds($paymentCriteria, $context)->firstId();
     }
 
     private function setPaymentMethodIsActive(bool $active, Context $context): void

@@ -9,17 +9,16 @@ use Satispay\Exception\SatispayInvalidAuthorizationException;
 use Satispay\Exception\SatispayNotValidPaymentIdForTransactionException;
 use Satispay\Exception\SatispayPaymentIdInTransactionEmptyException;
 use Satispay\Handler\Api\UpdateTransaction;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\Framework\Log\Package;
 
-/**
- * @Route(defaults={"_routeScope"={"storefront"}})
- */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
+#[Package('storefront')]
 class PaymentUpdatedController extends StorefrontController
 {
     public const PAYMENT_ID = 'payment_id';
@@ -43,9 +42,7 @@ class PaymentUpdatedController extends StorefrontController
         $this->updateTransaction = $updateTransaction;
     }
 
-    /**
-     * @Route("/satispay/payment/update", name="frontend.satispay.paymentUpdated", options={"seo"="false"}, methods={"GET"})
-     */
+    #[Route(path: '/satispay/payment/update', name: 'frontend.satispay.paymentUpdated', options: ['seo' => false], methods: ['GET'])]
     public function execute(Request $request, SalesChannelContext $context): Response
     {
         $paymentId = $request->get(self::PAYMENT_ID);
@@ -97,3 +94,4 @@ class PaymentUpdatedController extends StorefrontController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
+

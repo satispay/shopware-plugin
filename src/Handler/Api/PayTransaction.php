@@ -11,9 +11,11 @@ use Satispay\Helper\PaymentWrapperApi;
 use Satispay\Validation\Currency;
 use Satispay\Validation\SatispayConfiguration;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
+#[Package('checkout')]
 class PayTransaction
 {
     /**

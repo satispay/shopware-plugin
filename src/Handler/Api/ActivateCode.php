@@ -9,7 +9,9 @@ use Satispay\Exception\SatispaySettingsInvalidException;
 use Satispay\Helper\Activation;
 use Satispay\Helper\PaymentWrapperApi;
 use Satispay\System\Config as SatispayConfig;
+use Shopware\Core\Framework\Log\Package;
 
+#[Package('checkout')]
 class ActivateCode
 {
     /**

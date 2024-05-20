@@ -11,7 +11,6 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
-use Symfony\Component\Routing\RouterInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Psr\Log\LoggerInterface;
 use Satispay\Validation\SatispayConfiguration;
@@ -68,7 +67,7 @@ class SatispayPaymentsHandler extends ScheduledTaskHandler
         $this->scheduledTaskRepository = $scheduledTaskRepository;
         $this->salesChannelRepository = $salesChannelRepository;
         $this->logger = $logger;
-        parent::__construct($scheduledTaskRepository);
+        parent::__construct($scheduledTaskRepository, $logger);
     }
 
     public static function getHandledMessages(): iterable

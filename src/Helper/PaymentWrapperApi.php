@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Satispay\Helper;
 
-use PackageVersions\Versions;
 use Satispay\Exception\SatispayPaymentIdInTransactionEmptyException;
 use Satispay\System\Config as SatispayConfig;
 use SatispayGBusiness\Api as SatispayApi;
@@ -17,6 +16,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\Plugin\PluginEntity;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use function sprintf;
@@ -78,6 +78,7 @@ class PaymentWrapperApi
 
     /**
      * @param $payment
+     * @return string
      */
     public function generateRedirectPaymentUrl($payment): string
     {
@@ -169,17 +170,7 @@ class PaymentWrapperApi
     protected function initSatispay(?string $salesChannelId = null): void
     {
         SatispayApi::setPlatformHeader('Shopware');
-        // retrocompatibility with 6.1
-        try {
-            if (class_exists(Versions::class)) {
-                $shopwareVersion = Versions::getVersion('shopware/platform');
-            } else {
-                // compatibility with 6.4.1.2
-                $shopwareVersion = \Composer\InstalledVersions::getVersion('shopware/core');
-            }
-        } catch (\OutOfBoundsException $exception) {
-            $shopwareVersion = Versions::getVersion('shopware/core');
-        }
+        $shopwareVersion = \Composer\InstalledVersions::getVersion('shopware/core');
         SatispayApi::setPlatformVersionHeader($shopwareVersion);
         SatispayApi::setPluginNameHeader('shopware-plugin');
         SatispayApi::setPluginVersionHeader($this->getDbPluginVersion());
@@ -204,9 +195,9 @@ class PaymentWrapperApi
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('baseClass', \Satispay\Satispay::class));
 
-        /** @var \Shopware\Core\Framework\Plugin\PluginEntity $satispay */
+        /** @var PluginEntity $satispay */
         $satispay = $this->pluginRepository->search($criteria, $context)->getEntities()->first();
-        if($satispay !== NULL) {
+        if ($satispay !== NULL) {
             return $satispay->getVersion();
         }
         return self::VERSION_UNDEFINED;

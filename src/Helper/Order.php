@@ -3,6 +3,7 @@
 namespace Satispay\Helper;
 
 use Satispay\Handler\PaymentHandler;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
@@ -28,6 +29,7 @@ class Order
 
     /**
      * Order constructor.
+     * @param SatispayConfig $config
      * @param EntityRepository $orderRepository
      * @param EntityRepository $paymentRepository
      */
@@ -45,7 +47,9 @@ class Order
      * Return the Satispay orders following a complex criteria rule
      *
      * @param $context
-     * @return array|\Shopware\Core\Framework\DataAbstractionLayer\EntityCollection
+     * @param $salesChannelId
+     * @return array|EntityCollection
+     * @throws \Exception
      */
     public function getSatispayOrders($context, $salesChannelId)
     {
@@ -57,8 +61,7 @@ class Order
         $rangeEnd = $this->getEndDateScheduledTime();
         // create a complex criteria condition
         $criteriaOrder = $this->createOrdersCriteria($rangeStart, $rangeEnd, $satispayPaymentId, $salesChannelId);
-        $orders = $this->orderRepository->search($criteriaOrder, $context)->getEntities();
-        return $orders;
+        return $this->orderRepository->search($criteriaOrder, $context)->getEntities();
     }
 
     private function createOrdersCriteria($rangeStart, $rangeEnd, $satispayPaymentId, $salesChannelId)
@@ -70,7 +73,6 @@ class Order
                     [RangeFilter::GTE => $rangeStart, RangeFilter::LTE => $rangeEnd])
             )
             ->addFilter(new EqualsFilter('order.transactions.paymentMethodId', $satispayPaymentId))
-            //take every order in both state open and processing, for version < and > of 6.1
             ->addFilter(new EqualsAnyFilter(
                 'order.transactions.stateMachineState.technicalName',
                 [\Shopware\Core\Checkout\Order\OrderStates::STATE_OPEN,
@@ -90,37 +92,34 @@ class Order
     private function getSatispayPaymentId($context)
     {
         $paymentCriteria = (new Criteria())->addFilter(new EqualsFilter('handlerIdentifier', PaymentHandler::class));
-        $satispayPaymentId = $this->paymentRepository->searchIds($paymentCriteria, $context)->firstId();
-        return $satispayPaymentId;
+        return $this->paymentRepository->searchIds($paymentCriteria, $context)->firstId();
     }
 
     /**
      * Get the start criteria for the scheduled datetime
      *
      * @return string
+     * @throws \Exception
      */
     private function getStartDateScheduledTime($salesChannelId)
     {
         $now = new \DateTime();
-        $nowStart = $now->format('Y-m-d H:i:s');
         $scheduledTimeFrame = $this->config->getTimeFrameForScheduledTask($salesChannelId);
         $tosub = new \DateInterval('PT'. $scheduledTimeFrame . 'H');
-        $beforeStart = $now->sub($tosub)->format('Y-m-d H:i:s');
-        return $beforeStart;
+        return $now->sub($tosub)->format('Y-m-d H:i:s');
     }
 
     /**
      * Get the end criteria for the scheduled datetime
      *
      * @return string
+     * @throws \Exception
      */
     private function getEndDateScheduledTime()
     {
         $now = new \DateTime();
-        $nowStart = $now->format('Y-m-d H:i:s');
         // remove just 1 hour so normal transactions can still be processed
         $tosub = new \DateInterval('PT'. 1 . 'H');
-        $endStart = $now->sub($tosub)->format('Y-m-d H:i:s');
-        return $endStart;
+        return $now->sub($tosub)->format('Y-m-d H:i:s');
     }
 }

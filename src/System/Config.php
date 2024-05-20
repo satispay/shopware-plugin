@@ -136,16 +136,15 @@ class Config
     }
 
     /**
-     * Get the currently activation code fallback global value for the salesChannel in input
+     * Get the current activation code fallback global value for the salesChannel in input
      *
      * @return string|null activation code
      */
     public function getGlobalActivationCodeForSalesChannel(string $salesChannelId): ?string
     {
         $type = $this->getType($salesChannelId);
-        $value = $this->systemConfig->get("Satispay.config.{$type}ActivationCode");
 
-        return $value;
+        return $this->systemConfig->get("Satispay.config.{$type}ActivationCode");
     }
 
     /**
@@ -177,12 +176,12 @@ class Config
         $this->systemConfig->delete("Satispay.config.{$type}privateKey", $salesChannelId);
         $this->systemConfig->delete("Satispay.config.{$type}keyId", $salesChannelId);
         $activationCode = $this->systemConfig->get("Satispay.config.{$type}ActivationCode", $salesChannelId);
-        if($salesChannelId == null) {
+        if ($salesChannelId == null) {
             $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
         } else {
-            if($activationCode!= null && trim($activationCode) == "") {
+            if ($activationCode!= null && trim($activationCode) == "") {
                 $activatedCodeGlobal = $this->getGlobalActivatedCodeForSalesChannel($salesChannelId);
-                if(empty($activatedCodeGlobal) || trim($activatedCodeGlobal) == "") {
+                if (empty($activatedCodeGlobal) || trim($activatedCodeGlobal) == "") {
                     $this->systemConfig->delete("Satispay.config.{$type}ActivatedCode", $salesChannelId);
                     $this->systemConfig->delete("Satispay.config.{$type}ActivationCode", $salesChannelId);
                 } else {
@@ -193,7 +192,7 @@ class Config
                 $activationCodeGlobal = $this->getGlobalActivationCodeForSalesChannel($salesChannelId);
                 $trimActivationCode = isset($activationCode) ? trim($activationCode): false;
                 $trimActivationCodeGlobal = isset($activationCodeGlobal) ? trim($activationCodeGlobal): false;
-                if($trimActivationCode == $trimActivationCodeGlobal) {
+                if ($trimActivationCode == $trimActivationCodeGlobal) {
                     $this->systemConfig->delete("Satispay.config.{$type}ActivationCode", $salesChannelId);
                 }
             }
