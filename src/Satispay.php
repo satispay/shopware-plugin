@@ -52,6 +52,10 @@ class Satispay extends Plugin
         if (\version_compare($currentVersion, '1.1.1', '<')) {
             $this->updateTranslations($updateContext);
         }
+
+        if (\version_compare($currentVersion, '3.0.1', '<')) {
+            $this->updateAllowPaymentChange($updateContext);
+        }
     }
 
     private function addPaymentMethod(Context $context): void
@@ -60,6 +64,7 @@ class Satispay extends Plugin
 
         // Payment method exists already, no need to continue here
         if ($paymentMethodExists) {
+            $this->addAllowPaymentChange($context);
             return;
         }
 
@@ -73,7 +78,7 @@ class Satispay extends Plugin
             'name' => 'Satispay',
             'description' => 'Do it smart. Choose Satispay and pay with a tap!',
             'pluginId' => $pluginId,
-            'afterOrderEnabled' => false,
+            'afterOrderEnabled' => true,
         ];
 
         /** @var EntityRepository $paymentRepository */
@@ -122,6 +127,14 @@ class Satispay extends Plugin
         );
     }
 
+    private function updateAllowPaymentChange(UpdateContext $updateContext): void
+    {
+        //update allow payment change for Satispay Payment checkout
+        $this->addAllowPaymentChange(
+            $updateContext->getContext()
+        );
+    }
+
     private function addTranslationsToPaymentMethod(Context $context)
     {
         $paymentId = $this->getPaymentMethodId($context);
@@ -146,6 +159,26 @@ class Satispay extends Plugin
         if ($languageIT) {
             $this->upsertTranslation($context, $paymentId, $languageIT->getId(), 'Satispay', 'Paga smart, con Satispay hai tutto a portata di app!');
         }
+    }
+
+    private function addAllowPaymentChange(Context $context)
+    {
+        /** @var EntityRepository $paymentRepository */
+        $paymentRepository = $this->container->get('payment_method.repository');
+
+        $paymentMethodId = $this->getPaymentMethodId($context);
+
+        // Payment does not even exist, so nothing to update here
+        if (!$paymentMethodId) {
+            return;
+        }
+
+        $paymentMethod = [
+            'id' => $paymentMethodId,
+            'afterOrderEnabled' => true,
+        ];
+
+        $paymentRepository->update([$paymentMethod], $context);
     }
 
     private function upsertTranslation(Context $context, $paymentId, $languageId, $name, $description)
