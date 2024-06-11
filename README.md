@@ -21,7 +21,7 @@ For Shopware 6.5:
 ```bash
 composer require satispay/shopware6-plugin:2.0.0
 ```
-For Shopware 6.6 <u>**and over</u>**:
+For Shopware 6.6 <u>**and over**</u>:
 ```bash
 composer require satispay/shopware6-plugin
 ```
