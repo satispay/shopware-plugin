@@ -76,6 +76,7 @@ class Satispay extends Plugin
             // payment handler will be selected by the identifier
             'handlerIdentifier' => PaymentHandler::class,
             'name' => 'Satispay',
+            'technicalName' => 'satispay_satispay',
             'description' => 'Do it smart. Choose Satispay and pay with a tap!',
             'pluginId' => $pluginId,
             'afterOrderEnabled' => true,

@@ -2,7 +2,6 @@ import template from './satispay-payment-actions.html.twig';
 import './extension/satispay-payment-action-refund';
 
 const { Component } = Shopware;
-const { mapState } = Component.getComponentHelper();
 
 Component.register('satispay-payment-actions', {
     template,
@@ -25,7 +24,9 @@ Component.register('satispay-payment-actions', {
     },
 
     computed: {
-        ...mapState('swOrderDetail', ['order']),
+        order() {
+            return Shopware.Store.get('swOrderDetail').order;
+        },
 
         orderTransaction() {
             const lastTransactionIndex = this.order.transactions.length - 1;

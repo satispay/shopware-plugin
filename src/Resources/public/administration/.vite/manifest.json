@@ -1,0 +1,8 @@
+{
+  "main.js": {
+    "file": "assets/satispay-6tHuB-xN.js",
+    "name": "satispay",
+    "src": "main.js",
+    "isEntry": true
+  }
+}

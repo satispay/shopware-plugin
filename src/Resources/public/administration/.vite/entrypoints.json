@@ -1,0 +1,23 @@
+{
+  "base": "/bundles/satispay/administration/",
+  "entryPoints": {
+    "satispay": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/satispay/administration/assets/satispay-6tHuB-xN.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}

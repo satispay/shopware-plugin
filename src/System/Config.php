@@ -214,7 +214,7 @@ class Config
             ->orderBy('configuration_key', 'ASC')
             ->addOrderBy('sales_channel_id', 'ASC')
             ->setParameter('configurationKey', $configurationKey);
-        $activatedSalesChannel = $queryBuilder->execute()->fetchAll();
+        $activatedSalesChannel = $queryBuilder->executeQuery()->fetchAllAssociative();
         if ($activatedSalesChannel === false) {
             return null;
         }

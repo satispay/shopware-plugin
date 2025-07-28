@@ -12,6 +12,7 @@ use SatispayGBusiness\Payment as SatispayPaymentApi;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
+use Shopware\Core\Checkout\Payment\Cart\PaymentTransactionStruct;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -85,11 +86,10 @@ class PaymentWrapperApi
         return $payment->redirect_url;
     }
 
-    public function createPaymentPayload(AsyncPaymentTransactionStruct $transaction, Context $context): array
+    public function createPaymentPayload(OrderTransactionEntity $orderTransaction, PaymentTransactionStruct $transaction, Context $context): array
     {
-        $orderTransaction = $transaction->getOrderTransaction();
         $orderTransactionAmount = $orderTransaction->getAmount();
-        $order = $transaction->getOrder();
+        $order = $orderTransaction->getOrder();
         $currency = $this->currencyHelper->getCurrencyById($order->getCurrencyId(), $context);
 
         $redirectUrl = $transaction->getReturnUrl();
@@ -101,7 +101,7 @@ class PaymentWrapperApi
         $callback_url = $this->router->generate(
             'frontend.satispay.paymentUpdated',
             [
-                'transaction_id' => $transaction->getOrderTransaction()->getId(),
+                'transaction_id' => $transaction->getOrderTransactionId(),
                 'payment_id' => '', //it is not possible put {uuid} here because it will be escaped
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
@@ -120,7 +120,7 @@ class PaymentWrapperApi
             'metadata' => [
                 'order_id' => $order->getId(),
                 'order_number' => $order->getOrderNumber(),
-                'transaction_id' => $transaction->getOrderTransaction()->getId(),
+                'transaction_id' => $transaction->getOrderTransactionId(),
             ],
         ];
     }
