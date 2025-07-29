@@ -4,7 +4,7 @@ Satispay plugin for Shopware 6 ecommerce
 
 ## Requirements
 
-- Shopware 6.1._ or 6.2._ or 6.3._ or 6.4._ or 6.5._ or 6.6._ or 6.7.\
+- Shopware 6.1._ or 6.2._ or 6.3._ or 6.4._ or 6.5._ or 6.6._ or 6.7._
 - Satispay payment method is allowed only for EURO transactions.
 
 ## Installation
