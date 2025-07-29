@@ -4,7 +4,7 @@ Satispay plugin for Shopware 6 ecommerce
 
 ## Requirements
 
-- Shopware 6.1.* or 6.2.* or 6.3.* or 6.4.* or 6.5.* or 6.6.*
+- Shopware 6.1._ or 6.2._ or 6.3._ or 6.4._ or 6.5._ or 6.6._ or 6.7.\
 - Satispay payment method is allowed only for EURO transactions.
 
 ## Installation
@@ -14,17 +14,23 @@ Satispay plugin for Shopware 6 ecommerce
 Use the composer require command to add it to your ecommerce
 
 For Shopware versions <u>**lower**</u> than Shopware 6.5:
+
 ```bash
 composer require satispay/shopware6-plugin:1.2.0
 ```
+
 For Shopware 6.5:
+
 ```bash
 composer require satispay/shopware6-plugin:2.0.0
 ```
+
 For Shopware 6.6 <u>**and over**</u>:
+
 ```bash
 composer require satispay/shopware6-plugin
 ```
+
 Then you have to install and activate it
 
 ```bash
@@ -43,18 +49,23 @@ After installation, a new [rule](https://docs.shopware.com/en/shopware-6-en/sett
 2. Access Settings > System > Plugins for Shopware version lower than 6.4.x or access Extensions > My Extensions for Shopware version equal/higher than 6.4.x
 
    ![Settings System PLugins](docs/assets/settings-system-plugins.png)
+
 3. Select config button for Satispay payment plugin to access its settings
 
    ![Settings System PLugins](docs/assets/settings-system-plugins-config.png)
+
 4. Select if you want to use sandbox mode through the checkbox Sandbox (if active is blue and will run on sanbdox, not otherwise)
 
    ![Satispay Settings](docs/assets/satispay-settings.png)
+
 5. Insert your activation code created from your satispay account dashboard (Negozi Online -> Crea codice di attivazione)
 
    ![Satispay Token](docs/assets/satispay-business.png)
+
 6. Click Save button to save current settings
 
    ![Satispay Save](docs/assets/satispay-settings-save.png)
+
 7. Click Activate button
 
    ![Satispay Activate](docs/assets/satispay-settings-activate.png)
@@ -65,7 +76,7 @@ In case of error, you'll receive an error code for Satispay support to identify 
 If you **empty the token activation** and click **activate**,
 it will **delete current activation values** and you will need a new token to **activate your connection** to satispay.
 
-   ![Satispay Error](docs/assets/satispay-error.png)
+![Satispay Error](docs/assets/satispay-error.png)
 
 ### Enable Satispay Payment method
 
@@ -73,6 +84,7 @@ it will **delete current activation values** and you will need a new token to **
 2. Open the dropdown Payment methods from Payment and shipping settings and select Satispay payment
 
    ![Satispay Payment](docs/assets/set-satispay-payment-method.png)
+
 3. Click Save button to save current settings
 
 ### Extra settings (optional)
@@ -90,7 +102,8 @@ To view or change them select the action button and click edit.
 1. Open the order you want to create the refund for from the orders grid.
 
    _**Only the orders that have the payment status paid, refunded or refunded partially can be refunded.**_
-2. Select the **Satispay Tab**  _visible only if the order was paid with satispay_.
+
+2. Select the **Satispay Tab** _visible only if the order was paid with satispay_.
 
 ![Satispay Order Detail](docs/assets/select-order.png)
 
@@ -109,7 +122,7 @@ In case of error, you'll receive an error code for Satispay support to identify 
 
 ![Satispay Payment Flow](docs/assets/shopware-satispay-payment-flow.png)
 
-* In 6.1 the payment status after the get payment status will stay in **OPEN** instead of **IN PROGRESS**.
+- In 6.1 the payment status after the get payment status will stay in **OPEN** instead of **IN PROGRESS**.
 
 ## Scheduled task to finalize unhandled transactions
 
@@ -127,6 +140,7 @@ payments follow the default flow and wait for the callback).
 - 6.4
 - 6.5
 - 6.6
+- 6.7
 
 ## Contributing
 

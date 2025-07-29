@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Satispay\Exception\SatispayInvalidAuthorizationException;
 use Satispay\Exception\SatispayPaymentUnacceptedException;
 use Satispay\Helper\PaymentWrapperApi;
+use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -45,10 +46,11 @@ class FinalizeTransaction
      * @throws SatispayInvalidAuthorizationException
      * @throws SatispayPaymentUnacceptedException
      */
-    public function execute(AsyncPaymentTransactionStruct $transaction, string $paymentId, SalesChannelContext $salesChannelContext): void
+    public function execute(OrderTransactionEntity $orderTransaction, string $paymentId): void
     {
         try {
-            $satispayPayment = $this->paymentWrapperApi->getPaymentStatusOnSatispay($salesChannelContext->getSalesChannel()->getId(), $paymentId);
+            $order = $orderTransaction->getOrder();
+            $satispayPayment = $this->paymentWrapperApi->getPaymentStatusOnSatispay($order->getSalesChannelId(), $paymentId);
         } catch (\Exception $e) {
             $this->logger->error(
                 $e->getMessage(),
@@ -62,16 +64,16 @@ class FinalizeTransaction
             $this->logger->debug(
                 'Satispay payment accepted',
                 [
-                    'order_id' => $transaction->getOrder()->getId(),
-                    'order_number' => $transaction->getOrder()->getOrderNumber(),
+                    'order_id' => $order->getId(),
+                    'order_number' => $order->getOrderNumber(),
                 ]
             );
         } else {
             $this->logger->debug(
                 'Satispay payment NOT accepted',
                 [
-                    'order_id' => $transaction->getOrder()->getId(),
-                    'order_number' => $transaction->getOrder()->getOrderNumber(),
+                    'order_id' => $order->getId(),
+                    'order_number' => $order->getOrderNumber(),
                     'satispay_payment' => json_decode(json_encode($satispayPayment), true),
                 ]
             );

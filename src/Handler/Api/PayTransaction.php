@@ -10,7 +10,10 @@ use Satispay\Exception\SatispaySettingsInvalidException;
 use Satispay\Helper\PaymentWrapperApi;
 use Satispay\Validation\Currency;
 use Satispay\Validation\SatispayConfiguration;
-use Shopware\Core\Checkout\Payment\Cart\AsyncPaymentTransactionStruct;
+use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
+use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Checkout\Payment\Cart\PaymentTransactionStruct;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -18,43 +21,13 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 #[Package('checkout')]
 class PayTransaction
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var PaymentWrapperApi
-     */
-    protected $paymentWrapperApi;
-
-    /**
-     * @var Currency
-     */
-    protected $currencyValidation;
-
-    /**
-     * @var SatispayConfiguration
-     */
-    protected $configValidation;
-
-    /**
-     * @var EntityRepository
-     */
-    protected $orderTransactionRepo;
-
     public function __construct(
-        PaymentWrapperApi $paymentWrapperApi,
-        SatispayConfiguration $configValidation,
-        Currency $currencyValidation,
-        LoggerInterface $logger,
-        EntityRepository $orderTransactionRepo
+        private readonly PaymentWrapperApi $paymentWrapperApi,
+        private readonly SatispayConfiguration $configValidation,
+        private readonly Currency $currencyValidation,
+        private readonly LoggerInterface $logger,
+        private readonly EntityRepository $orderTransactionRepo
     ) {
-        $this->logger = $logger;
-        $this->paymentWrapperApi = $paymentWrapperApi;
-        $this->currencyValidation = $currencyValidation;
-        $this->configValidation = $configValidation;
-        $this->orderTransactionRepo = $orderTransactionRepo;
     }
 
     /**
@@ -62,16 +35,18 @@ class PayTransaction
      * @throws SatispayCurrencyException
      */
     public function getSatispayUrlForOrder(
-        AsyncPaymentTransactionStruct $transaction,
-        SalesChannelContext $salesChannelContext
+        OrderTransactionEntity $orderTransaction,
+        PaymentTransactionStruct $transaction,
+        Context $context
     ): string {
-        $salesChannelId = $salesChannelContext->getSalesChannel()->getId();
+        $order = $orderTransaction->getOrder();
+        $salesChannelId = $order->getSalesChannelId();
 
         //check satispay requirements
         $this->configValidation->isSatispayActivatedCorrectly($salesChannelId);
-        $this->currencyValidation->validateCurrencyId($transaction->getOrder()->getCurrencyId(), $salesChannelContext->getContext());
+        $this->currencyValidation->validateCurrencyId($order->getCurrencyId(), $context);
 
-        $paymentBody = $this->paymentWrapperApi->createPaymentPayload($transaction, $salesChannelContext->getContext());
+        $paymentBody = $this->paymentWrapperApi->createPaymentPayload($orderTransaction, $transaction, $context);
 
         $this->logger->debug(self::class . ' Created payment request payload', $paymentBody);
 
@@ -79,12 +54,12 @@ class PayTransaction
 
         if (isset($payment->id)) {
             $this->orderTransactionRepo->update([[
-                'id' => $transaction->getOrderTransaction()->getId(),
+                'id' => $transaction->getOrderTransactionId(),
                 'customFields' => [
                     PaymentWrapperApi::PAYMENT_ID_IN_TRANSACTION_CUSTOM_FIELD => $payment->id,
                 ],
-            ]], $salesChannelContext->getContext());
+            ]], $context);
         }
-        return $this->paymentWrapperApi->generateRedirectPaymentUrl($payment);
+            return $this->paymentWrapperApi->generateRedirectPaymentUrl($payment);
     }
 }

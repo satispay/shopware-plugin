@@ -1,4 +1,5 @@
 import template from './satispay-payment-detail.html.twig';
+import '../../component/satispay-payment-action';
 
 const { Component, Mixin, Context } = Shopware;
 const Criteria = Shopware.Data.Criteria;

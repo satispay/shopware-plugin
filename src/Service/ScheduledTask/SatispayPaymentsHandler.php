@@ -10,12 +10,16 @@ use Satispay\System\Config as SatispayConfig;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\Log\Package;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Psr\Log\LoggerInterface;
 use Satispay\Validation\SatispayConfiguration;
 use Satispay\Controller\Api\ConfigurationController;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[Package('checkout')]
+#[AsMessageHandler(handles: SatispayPayments::class)]
 class SatispayPaymentsHandler extends ScheduledTaskHandler
 {
     /**
@@ -70,14 +74,10 @@ class SatispayPaymentsHandler extends ScheduledTaskHandler
         parent::__construct($scheduledTaskRepository, $logger);
     }
 
-    public static function getHandledMessages(): iterable
-    {
-        return [ SatispayPayments::class ];
-    }
 
     public function run(): void
     {
-        $context = Context::createDefaultContext();
+        $context = Context::createCLIContext();
         $salesChannelIds = $this->getSalesChannelsForCriteria($context);
         if (empty($salesChannelIds)) {
             return;

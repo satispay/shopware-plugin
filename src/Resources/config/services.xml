@@ -11,7 +11,8 @@
             <argument type="service" id="Satispay\Handler\Api\FinalizeTransaction"/>
             <argument type="service" id="monolog.logger"/>
             <argument type="service" id="Satispay\Helper\PaymentWrapperApi"/>
-            <tag name="shopware.payment.method.async" />
+            <argument type="service" id="order_transaction.repository"/>
+            <tag name="shopware.payment.method"/>
         </service>
 
         <service id="Satispay\Controller\Api\ConfigurationController" public="true">

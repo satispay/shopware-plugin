@@ -1,49 +1,49 @@
 {
-    "name": "satispay/shopware6-plugin",
-    "description": "Satispay Shopware6 Plugin",
-    "type": "shopware-platform-plugin",
-    "license": "MIT",
-    "version": "3.0.1",
-    "autoload": {
-        "psr-4": {
-            "Satispay\\": "src/"
-        }
-    },
-    "homepage": "https://www.satispay.com",
-    "authors": [
-        {
-            "name": "Satispay",
-            "homepage": "https://www.satispay.com"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "github",
-            "url": "git@github.com:satispay/gbusiness-api-php-sdk.git"
-        }
-    ],
-    "require": {
-        "shopware/core": "6.6.*",
-        "shopware/storefront": "6.6.*",
-        "satispay/gbusiness-api-php-sdk": "1.3.*",
-        "ext-json": "*"
-    },
-    "extra": {
-        "shopware-plugin-class": "Satispay\\Satispay",
-        "label": {
-            "de-DE": "Satispay",
-            "en-GB": "Satispay",
-            "it-IT": "Satispay"
-        },
-        "description": {
-            "de-DE": "Spare Zeit und Geld, indem du Zahlungen von deinen Kunden mit Satispay akzeptierst. Kostenlos, einfach, sicher! #doitsmart",
-            "en-GB": "Save time and money by accepting payments from your customers with Satispay. Free, simple, secure! #doitsmart",
-            "it-IT": "Risparmia tempo e denaro ricevendo pagamenti dai tuoi clienti con Satispay. Gratuita, semplice, sicura. #doitsmart"
-        },
-        "manufacturerLink": {
-            "de-DE": "https://www.satispay.com/de-de/",
-            "en-GB": "https://www.satispay.com/en-de/",
-            "it-IT": "https://www.satispay.com/it-it/"
-        }
+  "name": "satispay/shopware6-plugin",
+  "description": "Satispay Shopware6 Plugin",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "version": "3.1.0",
+  "autoload": {
+    "psr-4": {
+      "Satispay\\": "src/"
     }
+  },
+  "homepage": "https://www.satispay.com",
+  "authors": [
+    {
+      "name": "Satispay",
+      "homepage": "https://www.satispay.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "github",
+      "url": "git@github.com:satispay/gbusiness-api-php-sdk.git"
+    }
+  ],
+  "require": {
+    "shopware/core": "6.7.*",
+    "shopware/storefront": "6.7.*",
+    "satispay/gbusiness-api-php-sdk": "1.3.*",
+    "ext-json": "*"
+  },
+  "extra": {
+    "shopware-plugin-class": "Satispay\\Satispay",
+    "label": {
+      "de-DE": "Satispay",
+      "en-GB": "Satispay",
+      "it-IT": "Satispay"
+    },
+    "description": {
+      "de-DE": "Spare Zeit und Geld, indem du Zahlungen von deinen Kunden mit Satispay akzeptierst. Kostenlos, einfach, sicher! #doitsmart",
+      "en-GB": "Save time and money by accepting payments from your customers with Satispay. Free, simple, secure! #doitsmart",
+      "it-IT": "Risparmia tempo e denaro ricevendo pagamenti dai tuoi clienti con Satispay. Gratuita, semplice, sicura. #doitsmart"
+    },
+    "manufacturerLink": {
+      "de-DE": "https://www.satispay.com/de-de/",
+      "en-GB": "https://www.satispay.com/en-de/",
+      "it-IT": "https://www.satispay.com/it-it/"
+    }
+  }
 }
