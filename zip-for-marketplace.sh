@@ -1,4 +1,4 @@
-# mkdir -p ~/Downloads/Satispay
+mkdir -p ~/Downloads/Satispay
 cp -R LICENSE ~/Downloads/Satispay
 cp -R README.md ~/Downloads/Satispay
 cp -R RELEASENOTES.md ~/Downloads/Satispay
